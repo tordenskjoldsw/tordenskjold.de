@@ -1,7 +1,7 @@
 # tordenskjold.de
 
-Personal website of Tobias Kaminski: the open-source software I build for
-the devices I use every day, and a devlog about it.
+My personal website: the open-source software I build for the devices I
+use every day, and a devlog about it.
 
 Server-rendered with FastAPI and Jinja2. No client-side JavaScript, no
 cookies, no tracking, no third-party requests.
