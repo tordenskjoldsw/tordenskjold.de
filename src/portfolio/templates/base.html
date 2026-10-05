@@ -15,6 +15,7 @@
     <meta property="og:url" content="{{ base_url }}{{ request.url.path }}">
     {% block og_extra %}{% endblock %}
     {% endblock %}
+    <link rel="icon" href="{{ static_url('img/favicon.svg') }}" type="image/svg+xml">
     {# Unversioned on purpose: it must match the url() in base.css, which cannot carry a content hash. #}
     <link rel="preload" href="/static/fonts/inter/Inter-Regular.woff2" as="font" type="font/woff2" crossorigin>
     <link rel="stylesheet" href="{{ static_url('css/tokens.css') }}">

@@ -57,3 +57,9 @@ def test_pages_have_unique_titles(sample_client: TestClient) -> None:
     titles = {page_title(sample_client.get(path).text) for path in paths}
 
     assert len(titles) == len(paths)
+
+
+def test_favicon_is_linked(client: TestClient) -> None:
+    html = client.get("/").text
+
+    assert re.search(r'rel="icon" href="/static/img/favicon\.svg\?v=\w+"', html)
