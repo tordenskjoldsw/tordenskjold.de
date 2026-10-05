@@ -374,17 +374,11 @@ a:hover {
   border-radius: var(--radius-md);
 }
 
-.platform-group {
-  display: grid;
-  gap: var(--space-4);
-}
-
-.platform-group + .platform-group {
-  margin-top: var(--space-12);
-}
-
+/* auto-fit with a wide minimum gives two columns on desktop and one on
+   phones, and lets a single card use the full width. */
 .project-list {
   display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(min(100%, var(--card-min-width)), 1fr));
   gap: var(--space-6);
 }
 
@@ -393,10 +387,9 @@ a:hover {
 .project-card {
   position: relative;
   display: grid;
-  grid-template-columns: repeat(auto-fit, minmax(min(100%, var(--column-min-width)), 1fr));
-  gap: var(--space-8);
-  align-items: center;
-  padding: var(--space-8);
+  grid-template-rows: auto 1fr;
+  padding: 0;
+  overflow: hidden;
   transition: border-color var(--transition-fast);
 }
 
@@ -405,16 +398,33 @@ a:hover {
   border-color: var(--color-accent);
 }
 
+.project-card__cover {
+  aspect-ratio: var(--cover-aspect-ratio);
+  border-bottom: var(--border-width) solid var(--color-border);
+}
+
 .project-card__cover img {
   display: block;
   width: 100%;
-  height: auto;
-  border-radius: var(--radius-sm);
+  height: 100%;
+  object-fit: cover;
+}
+
+.project-card__placeholder {
+  display: grid;
+  place-items: center;
+  height: 100%;
+  background: var(--color-bg);
+  color: var(--color-border);
+  font-family: var(--font-mono);
+  font-size: var(--font-size-hero);
 }
 
 .project-card__body {
-  display: grid;
+  display: flex;
+  flex-direction: column;
   gap: var(--space-3);
+  padding: var(--space-6);
 }
 
 .project-card__title {
@@ -437,9 +447,38 @@ a:hover {
 }
 
 .project-card__actions {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: baseline;
+  gap: var(--space-2) var(--space-6);
+  /* Pushes the actions to the bottom so they line up across a row. */
+  margin-top: auto;
+  padding-top: var(--space-2);
+}
+
+/* Only the real links sit above the stretched title link; the cue stays
+   below it, so clicking the cue opens the project like the rest of the
+   card. */
+.project-card__actions a {
   position: relative;
   z-index: 1;
-  margin-top: var(--space-2);
+}
+
+.project-card__cue {
+  color: var(--color-accent);
+  font-weight: var(--font-weight-semibold);
+}
+
+.project-card__cue::after {
+  content: "\2192";
+  display: inline-block;
+  margin-left: var(--space-2);
+  transition: transform var(--transition-fast);
+}
+
+.project-card:hover .project-card__cue::after,
+.project-card:has(.project-card__link:focus-visible) .project-card__cue::after {
+  transform: translateX(var(--space-1));
 }
 
 .page__cover img {

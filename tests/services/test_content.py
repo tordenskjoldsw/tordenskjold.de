@@ -62,21 +62,6 @@ def test_devlog_for_project(sample_content_dir: Path) -> None:
     assert [entry.slug for entry in content.devlog_for(project)] == ["newer"]
 
 
-def test_projects_grouped_by_platform_in_project_order(
-    sample_content_dir: Path,
-) -> None:
-    projects_dir = sample_content_dir / "projects"
-    write_entry(projects_dir, "beta", "title: B\nsummary: S\nplatform: Zeta\norder: 0")
-    write_entry(
-        projects_dir, "gamma", "title: G\nsummary: S\nplatform: Example OS\norder: 2"
-    )
-
-    groups = load_content(sample_content_dir, STATIC_DIR).projects_by_platform()
-
-    assert [group.platform for group in groups] == ["Zeta", "Example OS"]
-    assert [project.slug for project in groups[1].projects] == ["alpha", "gamma"]
-
-
 def test_loads_certifications(sample_content_dir: Path) -> None:
     content = load_content(sample_content_dir, STATIC_DIR)
 

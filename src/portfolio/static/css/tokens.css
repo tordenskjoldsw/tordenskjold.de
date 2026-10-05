@@ -40,6 +40,8 @@
   --text-width: 40rem;
   --article-width: 42rem;
   --aside-width: 16rem;
+  --card-min-width: 26rem;
+  --cover-aspect-ratio: 2 / 1;
   --column-min-width: 18rem;
   --screenshot-width: 12rem;
   --gutter: var(--space-4);

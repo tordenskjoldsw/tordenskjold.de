@@ -17,17 +17,11 @@
 
 <section class="section container" id="projects" aria-labelledby="projects-title">
   <h2 class="section__title" id="projects-title">Projects</h2>
-  {% for group in platform_groups %}
-  {% set first_group = loop.first %}
-  <div class="platform-group">
-    <h3 class="eyebrow">{{ group.platform }}</h3>
-    <div class="project-list">
-      {% for project in group.projects %}
-      {{ project_card(project, eager=first_group and loop.first) }}
-      {% endfor %}
-    </div>
+  <div class="project-list">
+    {% for project in projects %}
+    {{ project_card(project, eager=loop.first) }}
+    {% endfor %}
   </div>
-  {% endfor %}
 </section>
 
 {% if latest_devlog %}

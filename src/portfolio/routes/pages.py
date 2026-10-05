@@ -19,7 +19,7 @@ async def home(request: Request, content: Content) -> HTMLResponse:
         request,
         "pages/home.html",
         {
-            "platform_groups": content.projects_by_platform(),
+            "projects": content.projects,
             "latest_devlog": content.devlog[:LATEST_DEVLOG_COUNT],
             "certifications": content.certifications,
         },

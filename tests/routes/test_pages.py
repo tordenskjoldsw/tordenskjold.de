@@ -13,7 +13,7 @@ def test_home_renders_content(client: TestClient) -> None:
     assert "4A0-100" in response.text
 
 
-def test_home_groups_projects_by_platform(client: TestClient) -> None:
+def test_project_cards_show_platform(client: TestClient) -> None:
     html = client.get("/").text
 
     assert html.index("Sailfish OS") < html.index("SailVault")
@@ -25,6 +25,12 @@ def test_home_links_project_detail_pages(client: TestClient) -> None:
 
     assert 'href="/projects/sailvault"' in html
     assert 'href="/projects/pineforge"' in html
+
+
+def test_project_card_cue_is_hidden_from_screen_readers(client: TestClient) -> None:
+    html = client.get("/").text
+
+    assert '<span class="project-card__cue" aria-hidden="true">' in html
 
 
 def test_home_links_github_profile(client: TestClient) -> None:

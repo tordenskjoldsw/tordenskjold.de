@@ -32,11 +32,6 @@ class Project(ContentModel):
     body_html: str
 
 
-class PlatformGroup(ContentModel):
-    platform: str
-    projects: tuple[Project, ...]
-
-
 class DevlogEntry(ContentModel):
     slug: str = Field(pattern=SLUG_PATTERN)
     title: str = Field(min_length=1)
@@ -71,13 +66,3 @@ class SiteContent(ContentModel):
 
     def devlog_for(self, project: Project) -> tuple[DevlogEntry, ...]:
         return tuple(e for e in self.devlog if e.project == project.slug)
-
-    def projects_by_platform(self) -> tuple[PlatformGroup, ...]:
-        # dict keeps insertion order, so platforms follow the project order.
-        groups: dict[str, list[Project]] = {}
-        for project in self.projects:
-            groups.setdefault(project.platform, []).append(project)
-        return tuple(
-            PlatformGroup(platform=platform, projects=tuple(projects))
-            for platform, projects in groups.items()
-        )

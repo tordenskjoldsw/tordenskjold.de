@@ -25,17 +25,27 @@
 {% endmacro %}
 
 {% macro project_card(project, eager=false) %}
-<article class="card project-card{% if project.cover %} project-card--with-cover{% endif %}">
-  {% if project.cover %}
-  <div class="project-card__cover">{{ image(project.cover, eager) }}</div>
-  {% endif %}
+<article class="card project-card">
+  <div class="project-card__cover">
+    {% if project.cover %}
+    {{ image(project.cover, eager) }}
+    {% else %}
+    {# Placeholder keeps cards in a row the same height until a cover exists. #}
+    <span class="project-card__placeholder" aria-hidden="true">{{ project.title }}</span>
+    {% endif %}
+  </div>
   <div class="project-card__body">
-    <h4 class="project-card__title">
+    <p class="eyebrow">{{ project.platform }}</p>
+    <h3 class="project-card__title">
       <a class="project-card__link" href="/projects/{{ project.slug }}">{{ project.title }}</a>
-    </h4>
+    </h3>
     <p class="muted">{{ project.summary }}</p>
     {{ project_meta(project) }}
-    <div class="project-card__actions">{{ project_links(project) }}</div>
+    <div class="project-card__actions">
+      {# Visual cue only: the title link already names the target for screen readers. #}
+      <span class="project-card__cue" aria-hidden="true">View project</span>
+      {{ project_links(project) }}
+    </div>
   </div>
 </article>
 {% endmacro %}
