@@ -3,8 +3,8 @@ from typing import Annotated
 from fastapi import APIRouter, Depends, HTTPException, Request
 from fastapi.responses import HTMLResponse
 
-from portfolio.models import SiteContent
-from portfolio.services.content import get_site_content
+from portfolio.models import LegalTexts, SiteContent
+from portfolio.services.content import get_legal_texts, get_site_content
 from portfolio.services.github import RepoStatsCache, get_repo_stats
 from portfolio.templating import templates
 
@@ -15,6 +15,7 @@ HOME_PROJECT_LIMIT = 4
 router = APIRouter(include_in_schema=False)
 Content = Annotated[SiteContent, Depends(get_site_content)]
 StatsCache = Annotated[RepoStatsCache, Depends(get_repo_stats)]
+Legal = Annotated[LegalTexts, Depends(get_legal_texts)]
 
 
 @router.api_route("/", methods=["GET", "HEAD"], response_class=HTMLResponse)
@@ -62,4 +63,22 @@ async def project_detail(
             "stats": repo_stats.get(project.slug),
             "devlog": content.devlog_for(project),
         },
+    )
+
+
+@router.api_route("/imprint", methods=["GET", "HEAD"], response_class=HTMLResponse)
+async def imprint(request: Request, legal: Legal) -> HTMLResponse:
+    return templates.TemplateResponse(
+        request,
+        "pages/legal.html",
+        {"title": "Impressum", "body_html": legal.imprint_html},
+    )
+
+
+@router.api_route("/privacy", methods=["GET", "HEAD"], response_class=HTMLResponse)
+async def privacy(request: Request, legal: Legal) -> HTMLResponse:
+    return templates.TemplateResponse(
+        request,
+        "pages/legal.html",
+        {"title": "Datenschutzerklärung", "body_html": legal.privacy_html},
     )

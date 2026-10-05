@@ -1,0 +1,20 @@
+{% extends "base.html" %}
+
+{% block title %}{{ title }} - Tobias Kaminski{% endblock %}
+{% block description %}{{ title }} - Tobias Kaminski{% endblock %}
+{# Legal pages are linked from every page but kept out of search results,
+   which would otherwise surface the postal address. #}
+{% block meta %}
+<meta name="robots" content="noindex">
+{% endblock %}
+
+{% block content %}
+<article class="column page" lang="de">
+  <header class="page__header">
+    <h1 class="page__title">{{ title }}</h1>
+  </header>
+  <div class="prose">
+    {{ body_html | safe }}
+  </div>
+</article>
+{% endblock %}

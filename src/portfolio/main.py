@@ -11,7 +11,7 @@ from portfolio.middleware import SecurityHeadersMiddleware
 from portfolio.models import Project
 from portfolio.routes import devlog, meta, pages
 from portfolio.routes.errors import register_error_handlers
-from portfolio.services.content import load_content
+from portfolio.services.content import load_content, load_legal
 from portfolio.services.github import RepoStatsCache, create_client, refresh_forever
 from portfolio.static_files import STATIC_URL_PREFIX, CachedStaticFiles
 from portfolio.templating import STATIC_DIR
@@ -35,6 +35,7 @@ def create_app(settings: Settings | None = None) -> FastAPI:
             len(content.certifications),
         )
         app.state.content = content
+        app.state.legal = await asyncio.to_thread(load_legal, settings.legal_dir)
         app.state.repo_stats = RepoStatsCache()
         if not settings.github_enabled:
             yield

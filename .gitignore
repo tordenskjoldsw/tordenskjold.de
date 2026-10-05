@@ -17,3 +17,6 @@ htmlcov/
 
 # Local configuration and secrets
 .env
+
+# Real legal texts contain the postal address; only legal.example/ is tracked
+/legal/

@@ -50,6 +50,11 @@ class Certification(ContentModel):
     credential_url: HttpUrl | None = None
 
 
+class LegalTexts(ContentModel):
+    imprint_html: str
+    privacy_html: str
+
+
 class SitemapEntry(ContentModel):
     path: str
     lastmod: datetime.date | None = None

@@ -6,7 +6,13 @@ from fastapi import Request
 from markdown_it import MarkdownIt
 from pydantic import BaseModel, TypeAdapter, ValidationError
 
-from portfolio.models import Certification, DevlogEntry, Project, SiteContent
+from portfolio.models import (
+    Certification,
+    DevlogEntry,
+    LegalTexts,
+    Project,
+    SiteContent,
+)
 
 FRONT_MATTER_PATTERN = re.compile(
     r"\A---\n(?P<yaml>.*?)\n---(?:\n(?P<body>.*))?\Z", re.DOTALL
@@ -60,6 +66,18 @@ def load_certifications(path: Path) -> tuple[Certification, ...]:
         raise ContentError(f"{path}: invalid certifications\n{exc}") from exc
 
 
+def load_legal(legal_dir: Path) -> LegalTexts:
+    return LegalTexts(
+        imprint_html=_load_legal_page(legal_dir / "imprint.md"),
+        privacy_html=_load_legal_page(legal_dir / "privacy.md"),
+    )
+
+
+def get_legal_texts(request: Request) -> LegalTexts:
+    texts: LegalTexts = request.app.state.legal
+    return texts
+
+
 def get_site_content(request: Request) -> SiteContent:
     content: SiteContent = request.app.state.content
     return content
@@ -89,6 +107,15 @@ def _load_entry[EntryT: BaseModel](path: Path, model: type[EntryT]) -> EntryT:
         return model.model_validate(data)
     except ValidationError as exc:
         raise ContentError(f"{path}: invalid front matter\n{exc}") from exc
+
+
+def _load_legal_page(path: Path) -> str:
+    html: str = MARKDOWN.render(_read_text(path))
+    # The page template provides the only h1; a second one would break the
+    # heading order.
+    if "<h1>" in html:
+        raise ContentError(f"{path}: use ## headings, the page already has a title")
+    return html
 
 
 def _check_images_exist(project: Project, static_dir: Path) -> None:
