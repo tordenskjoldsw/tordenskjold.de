@@ -10,6 +10,7 @@ def test_home_renders_content(client: TestClient) -> None:
     assert "<h1" in response.text
     assert "SailVault" in response.text
     assert "PineForge" in response.text
+    assert "https://github.com/tordenskjoldsw/PineForge" in response.text
     assert "4A0-100" in response.text
 
 
