@@ -3,6 +3,7 @@ from pathlib import Path
 from fastapi import Request
 from fastapi.templating import Jinja2Templates
 
+from portfolio.config import get_app_settings
 from portfolio.services.content import get_site_content
 from portfolio.static_files import StaticUrls, build_static_versions
 
@@ -11,10 +12,14 @@ STATIC_DIR = PACKAGE_DIR / "static"
 GITHUB_PROFILE_URL = "https://github.com/tordenskjoldsw"
 
 
-# Navigation and footer live in base.html, so every page needs to know
-# whether the devlog has entries to link to.
+# base.html needs these on every page: navigation and footer link the
+# devlog only when it has entries, and canonical and Open Graph URLs must
+# be absolute.
 def site_context(request: Request) -> dict[str, object]:
-    return {"has_devlog": bool(get_site_content(request).devlog)}
+    return {
+        "has_devlog": bool(get_site_content(request).devlog),
+        "base_url": get_app_settings(request).base_url,
+    }
 
 
 templates = Jinja2Templates(

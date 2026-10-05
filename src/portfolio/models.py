@@ -53,6 +53,11 @@ class Certification(ContentModel):
     credential_url: HttpUrl | None = None
 
 
+class SitemapEntry(ContentModel):
+    path: str
+    lastmod: datetime.date | None = None
+
+
 class SiteContent(ContentModel):
     projects: tuple[Project, ...]
     devlog: tuple[DevlogEntry, ...]

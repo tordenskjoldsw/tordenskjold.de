@@ -2,6 +2,10 @@
 
 {% block title %}{{ entry.title }} - Devlog - Tobias Kaminski{% endblock %}
 {% block description %}{{ entry.summary }}{% endblock %}
+{% block og_type %}article{% endblock %}
+{% block og_extra %}
+<meta property="article:published_time" content="{{ entry.date.isoformat() }}">
+{% endblock %}
 
 {% block content %}
 <article class="container page">

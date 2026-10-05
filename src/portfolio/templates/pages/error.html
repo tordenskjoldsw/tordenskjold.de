@@ -1,6 +1,10 @@
 {% extends "base.html" %}
 
 {% block title %}{{ "Page not found" if status_code == 404 else "Error" }} - Tobias Kaminski{% endblock %}
+{# Error pages have no canonical URL and must not be indexed. #}
+{% block meta %}
+<meta name="robots" content="noindex">
+{% endblock %}
 
 {% block content %}
 <div class="container page">
