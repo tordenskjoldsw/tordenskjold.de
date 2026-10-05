@@ -5,7 +5,8 @@
   --color-bg: #0a0a0a;
   --color-surface: #161616;
   --color-border: #2a2a2a;
-  --color-dot: #262626;
+  --color-grid: #1e1e1e;
+  --color-glow: color-mix(in srgb, var(--color-accent) 12%, transparent);
   --color-text: #d4d4d4;
   --color-text-strong: #fafafa;
   --color-text-muted: #a3a3a3;
@@ -46,8 +47,9 @@
   --icon-size: 1.25em;
   --project-icon-size: 2.5rem;
   --project-min-width: 18rem;
-  --dot-spacing: 1.5rem;
-  --dot-radius: 1px;
+  --grid-spacing: 3rem;
+  --grid-fade-shape: ellipse 70% 70% at 50% 0%;
+  --glow-shape: ellipse 60% 50% at 50% -10%;
   --divider-width: 3rem;
 
   /* Shape */

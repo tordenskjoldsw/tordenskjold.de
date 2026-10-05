@@ -38,8 +38,8 @@ html {
   scroll-behavior: smooth;
 }
 
-/* A static dot grid: texture without images, scripts or motion. The
-   column layout keeps the footer at the bottom of short pages. */
+/* A faint accent glow at the top. The column layout keeps the footer at
+   the bottom of short pages. */
 body {
   display: flex;
   flex-direction: column;
@@ -47,17 +47,28 @@ body {
   min-height: 100dvh;
   margin: 0;
   background-color: var(--color-bg);
-  background-image: radial-gradient(
-    circle,
-    var(--color-dot) var(--dot-radius),
-    transparent var(--dot-radius)
-  );
-  background-size: var(--dot-spacing) var(--dot-spacing);
+  background-image: radial-gradient(var(--glow-shape), var(--color-glow), transparent 70%);
+  background-repeat: no-repeat;
   color: var(--color-text);
   font-family: var(--font-sans);
   font-size: var(--font-size-base);
   font-weight: var(--font-weight-regular);
   line-height: var(--line-height-base);
+}
+
+/* A static line grid behind everything that fades out downwards:
+   texture without images, scripts or motion. */
+body::before {
+  content: "";
+  position: fixed;
+  inset: 0;
+  z-index: -1;
+  pointer-events: none;
+  background-image:
+    linear-gradient(var(--color-grid) var(--border-width), transparent var(--border-width)),
+    linear-gradient(90deg, var(--color-grid) var(--border-width), transparent var(--border-width));
+  background-size: var(--grid-spacing) var(--grid-spacing);
+  mask-image: radial-gradient(var(--grid-fade-shape), black 20%, transparent 100%);
 }
 
 main {
