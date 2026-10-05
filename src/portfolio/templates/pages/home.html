@@ -1,60 +1,78 @@
 {% extends "base.html" %}
-{% from "partials/macros.html" import project_card, devlog_list %}
+{% from "partials/macros.html" import project_chip, project_item, devlog_list %}
+{% from "partials/icons.html" import icon %}
 
 {% block title %}Tobias Kaminski - Networking & Open Source{% endblock %}
 {% block description %}Tobias Kaminski: open-source projects for Sailfish OS and PineTime, such as SailVault and PineForge.{% endblock %}
 
 {% block content %}
-<section class="hero container" aria-labelledby="hero-title">
-  <p class="eyebrow">Networking · Open source</p>
-  <h1 class="hero__title" id="hero-title">Tobias Kaminski</h1>
-  <p class="hero__intro">I build open-source software for Sailfish OS and the PineTime.</p>
-  <ul class="button-list">
-    <li><a class="button button--primary" href="#projects">Projects</a></li>
-    <li><a class="button" href="{{ github_profile_url }}">GitHub</a></li>
-  </ul>
-</section>
+<div class="column">
+  <section class="intro" id="about" aria-labelledby="intro-title">
+    <h1 class="page__title" id="intro-title">Tobias Kaminski</h1>
+    <p class="page__lead">I build open-source software for Sailfish OS and the PineTime.</p>
 
-<section class="section container" id="projects" aria-labelledby="projects-title">
-  <h2 class="section__title" id="projects-title">Projects</h2>
-  <div class="project-list">
-    {% for project in projects %}
-    {{ project_card(project, repo_stats.get(project.slug), eager=loop.first) }}
-    {% endfor %}
-  </div>
-</section>
+    <dl class="chip-rows">
+      <div>
+        <dt>Creator of</dt>
+        <dd>
+          <ul class="chips">
+            {% for project in projects %}
+            <li>{{ project_chip(project) }}</li>
+            {% endfor %}
+          </ul>
+        </dd>
+      </div>
+      <div>
+        <dt>Certified</dt>
+        <dd>
+          <ul class="chips">
+            {% for certification in certifications %}
+            <li>
+              {% if certification.credential_url %}
+              <a class="chip" href="{{ certification.credential_url }}">{{ certification.name }}<span class="meta">{{ certification.exam_code }}</span></a>
+              {% else %}
+              <span class="chip">{{ certification.name }}<span class="meta">{{ certification.exam_code }}</span></span>
+              {% endif %}
+            </li>
+            {% endfor %}
+          </ul>
+        </dd>
+      </div>
+      <div>
+        <dt>Find me on</dt>
+        <dd>
+          <ul class="chips">
+            <li><a class="chip" href="{{ github_profile_url }}">{{ icon("github") }}GitHub</a></li>
+          </ul>
+        </dd>
+      </div>
+    </dl>
 
-{% if latest_devlog %}
-<section class="section container" id="devlog" aria-labelledby="devlog-title">
-  <div class="section__header">
-    <h2 class="section__title" id="devlog-title">Devlog</h2>
-    <a href="/devlog">All entries</a>
-  </div>
-  {{ devlog_list(latest_devlog) }}
-</section>
-{% endif %}
+    <p>I work in networking and like software I can understand and control. That is why I build my own: a password manager that keeps my data in an open format on my Sailfish OS phone, and the firmware on the PineTime I wear every day.</p>
+    <p>Everything is open source. Bug reports, ideas and pull requests are welcome on <a href="{{ github_profile_url }}">GitHub</a>.</p>
+  </section>
 
-<section class="section container" id="about" aria-labelledby="about-title">
-  <h2 class="section__title" id="about-title">About</h2>
-  <div class="columns">
-    <div class="prose">
-      <p>I work in networking and like software I can understand and control. That is why I build my own: a password manager that keeps my data in an open format on my Sailfish OS phone, and the firmware on the PineTime I wear every day.</p>
-      <p>Everything is open source. Bug reports, ideas and pull requests are welcome on <a href="{{ github_profile_url }}">GitHub</a>.</p>
+  <hr class="divider">
+
+  <section class="home-section" id="projects" aria-labelledby="projects-title">
+    <h2 class="section__title" id="projects-title">Projects</h2>
+    <ul class="project-list">
+      {% for project in projects %}
+      {{ project_item(project, repo_stats.get(project.slug)) }}
+      {% endfor %}
+    </ul>
+  </section>
+
+  {% if latest_devlog %}
+  <hr class="divider">
+
+  <section class="home-section" id="devlog" aria-labelledby="devlog-title">
+    <div class="section__header">
+      <h2 class="section__title" id="devlog-title">Devlog</h2>
+      <a href="/devlog">All entries</a>
     </div>
-    <aside class="card" aria-labelledby="certifications-title">
-      <h3 class="eyebrow" id="certifications-title">Certifications</h3>
-      <ul class="certification-list">
-        {% for certification in certifications %}
-        <li class="certification">
-          <span class="certification__name">{{ certification.name }}</span>
-          <span class="meta">{{ certification.exam_code }} · {{ certification.issuer }}</span>
-          {% if certification.credential_url %}
-          <a href="{{ certification.credential_url }}">Verify credential<span class="visually-hidden"> {{ certification.name }}</span></a>
-          {% endif %}
-        </li>
-        {% endfor %}
-      </ul>
-    </aside>
-  </div>
-</section>
+    {{ devlog_list(latest_devlog) }}
+  </section>
+  {% endif %}
+</div>
 {% endblock %}

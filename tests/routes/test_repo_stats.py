@@ -32,10 +32,10 @@ def stats_client(app: FastAPI) -> Iterator[TestClient]:
         yield client
 
 
-def test_card_shows_latest_release(stats_client: TestClient) -> None:
+def test_project_list_shows_latest_release(stats_client: TestClient) -> None:
     html = stats_client.get("/").text
 
-    assert "Latest release: v1.0.1" in html
+    assert " · v1.0.1" in html
 
 
 def test_project_page_shows_release_and_last_push(stats_client: TestClient) -> None:
@@ -51,5 +51,5 @@ def test_pages_render_without_github_data(client: TestClient) -> None:
     project = client.get("/projects/pineforge")
 
     assert home.status_code == project.status_code == 200
-    assert "Latest release" not in home.text
+    assert "v1.0.1" not in home.text
     assert "Last push" not in project.text

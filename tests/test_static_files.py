@@ -39,7 +39,7 @@ def test_pages_reference_versioned_assets(client: TestClient) -> None:
     html = client.get("/").text
 
     assert re.search(r'href="/static/css/base\.css\?v=[0-9a-f]{12}"', html)
-    assert re.search(r'src="/static/img/projects/sailvault/cover\.png\?v=', html)
+    assert re.search(r'src="/static/img/projects/sailvault/icon\.svg\?v=', html)
 
 
 def test_static_files_are_cached_long_term(client: TestClient) -> None:

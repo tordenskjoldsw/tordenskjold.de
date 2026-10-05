@@ -13,51 +13,39 @@
 {% endblock %}
 
 {% block content %}
-<article class="container project-page">
+<article class="column page">
   <p><a href="/#projects">All projects</a></p>
 
   <header class="page__header">
     <p class="eyebrow">{{ project.platform }}</p>
     <h1 class="page__title">{{ project.title }}</h1>
     <p class="page__lead">{{ project.summary }}</p>
+    <dl class="facts">
+      {% if project.tags %}
+      <div><dt>Tech</dt><dd>{{ project.tags | join(" · ") }}</dd></div>
+      {% endif %}
+      {% if project.license %}
+      <div><dt>License</dt><dd>{{ project.license }}</dd></div>
+      {% endif %}
+      {% if stats and stats.latest_release %}
+      <div>
+        <dt>Latest release</dt>
+        <dd><a href="{{ stats.latest_release.html_url }}">{{ stats.latest_release.tag_name }}</a> <span class="muted">({{ stats.latest_release.published_at.date().isoformat() }})</span></dd>
+      </div>
+      {% endif %}
+      {% if stats %}
+      <div><dt>Last push</dt><dd>{{ stats.last_push.isoformat() }}</dd></div>
+      {% endif %}
+    </dl>
+    {{ project_links(project) }}
   </header>
 
   {% if project.cover %}
   <div class="page__cover">{{ image(project.cover, eager=true) }}</div>
   {% endif %}
 
-  {# The facts box comes first so it sits above the text on narrow screens. #}
-  <div class="with-sidebar">
-    <aside class="card project-facts" aria-labelledby="facts-title">
-      <h2 class="eyebrow" id="facts-title">Project</h2>
-      <dl class="facts">
-        <dt>Platform</dt>
-        <dd>{{ project.platform }}</dd>
-        {% if project.tags %}
-        <dt>Tech</dt>
-        <dd>{{ project.tags | join(" · ") }}</dd>
-        {% endif %}
-        {% if project.license %}
-        <dt>License</dt>
-        <dd>{{ project.license }}</dd>
-        {% endif %}
-        {% if stats and stats.latest_release %}
-        <dt>Latest release</dt>
-        <dd>
-          <a href="{{ stats.latest_release.html_url }}">{{ stats.latest_release.tag_name }}</a>
-          <span class="muted">({{ stats.latest_release.published_at.date().isoformat() }})</span>
-        </dd>
-        {% endif %}
-        {% if stats %}
-        <dt>Last push</dt>
-        <dd>{{ stats.last_push.isoformat() }}</dd>
-        {% endif %}
-      </dl>
-      {{ project_links(project) }}
-    </aside>
-    <div class="prose">
-      {{ project.body_html | safe }}
-    </div>
+  <div class="prose">
+    {{ project.body_html | safe }}
   </div>
 
   {% if project.screenshots %}

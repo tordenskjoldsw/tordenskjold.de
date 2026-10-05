@@ -38,9 +38,21 @@ html {
   scroll-behavior: smooth;
 }
 
+/* A static dot grid: texture without images, scripts or motion. The
+   column layout keeps the footer at the bottom of short pages. */
 body {
+  display: flex;
+  flex-direction: column;
+  min-height: 100vh;
+  min-height: 100dvh;
   margin: 0;
-  background: var(--color-bg);
+  background-color: var(--color-bg);
+  background-image: radial-gradient(
+    circle,
+    var(--color-dot) var(--dot-radius),
+    transparent var(--dot-radius)
+  );
+  background-size: var(--dot-spacing) var(--dot-spacing);
   color: var(--color-text);
   font-family: var(--font-sans);
   font-size: var(--font-size-base);
@@ -48,18 +60,24 @@ body {
   line-height: var(--line-height-base);
 }
 
+main {
+  flex: 1 0 auto;
+}
+
 h1,
 h2,
-h3,
-h4 {
+h3 {
   margin: 0;
+  color: var(--color-text-strong);
   font-weight: var(--font-weight-semibold);
   line-height: var(--line-height-tight);
 }
 
-p {
+p,
+dl,
+dd,
+figure {
   margin: 0;
-  max-width: var(--text-width);
 }
 
 ul {
@@ -69,13 +87,15 @@ ul {
 }
 
 a {
-  color: var(--color-accent);
+  color: var(--color-text-strong);
+  text-decoration: underline;
+  text-decoration-color: var(--color-link-underline);
   text-underline-offset: var(--space-1);
-  transition: color var(--transition-fast);
+  transition: text-decoration-color var(--transition-fast), color var(--transition-fast);
 }
 
 a:hover {
-  color: var(--color-text);
+  text-decoration-color: var(--color-accent);
 }
 
 :focus-visible {
@@ -84,121 +104,37 @@ a:hover {
   border-radius: var(--radius-sm);
 }
 
+img {
+  display: block;
+  max-width: 100%;
+  height: auto;
+}
+
 /* Layout */
 
-.container {
+.column {
   width: 100%;
-  max-width: var(--content-width);
+  max-width: calc(var(--column-width) + 2 * var(--gutter));
   margin-inline: auto;
   padding-inline: var(--gutter);
 }
 
-.section {
-  padding-block: var(--space-12);
-}
-
-.section__header {
-  display: flex;
-  flex-wrap: wrap;
-  align-items: baseline;
-  justify-content: space-between;
-  gap: var(--space-4);
-  margin-bottom: var(--space-8);
-}
-
-.section__title {
-  margin-bottom: var(--space-8);
-  font-size: var(--font-size-xl);
-}
-
-.section__header .section__title {
-  margin-bottom: 0;
-}
-
-.columns {
-  display: grid;
-  grid-template-columns: repeat(auto-fit, minmax(min(100%, var(--column-min-width)), 1fr));
-  gap: var(--space-8);
-  align-items: start;
-}
-
-/* Single-column pages keep cover, text and screenshots in one centered
-   reading column instead of a narrow text strip in a wide container. */
 .page {
   display: grid;
   gap: var(--space-8);
-  max-width: calc(var(--article-width) + 2 * var(--gutter));
-  padding-block: var(--space-12);
-}
-
-.page :is(p, ul, ol) {
-  max-width: none;
-}
-
-.project-page {
-  display: grid;
-  gap: var(--space-8);
-  padding-block: var(--space-12);
-}
-
-/* Sidebar layout without media queries: the aside wraps above the text as
-   soon as both no longer fit side by side. row-reverse puts the aside,
-   which comes first in the markup, on the right on wide screens. */
-.with-sidebar {
-  display: flex;
-  flex-direction: row-reverse;
-  flex-wrap: wrap;
-  justify-content: space-between;
-  align-items: flex-start;
-  gap: var(--space-12);
-}
-
-.with-sidebar > aside {
-  flex: 1 1 var(--aside-width);
-}
-
-.with-sidebar > .prose {
-  flex: 999 1 0;
-  min-width: min(100%, var(--article-width));
-  max-width: var(--article-width);
-}
-
-.with-sidebar > .prose :is(p, ul, ol) {
-  max-width: none;
-}
-
-.project-facts {
-  display: grid;
-  gap: var(--space-4);
-}
-
-.facts {
-  display: grid;
-  gap: var(--space-1);
-  margin: 0;
-}
-
-.facts dt {
-  color: var(--color-text-muted);
-  font-size: var(--font-size-sm);
-}
-
-.facts dd {
-  margin: 0 0 var(--space-3);
+  padding-block: var(--space-12) var(--space-16);
 }
 
 .page__header {
   display: grid;
-  justify-items: start;
-  gap: var(--space-3);
+  gap: var(--space-4);
 }
 
 .page__title {
-  font-size: var(--font-size-hero);
+  font-size: var(--font-size-title);
 }
 
 .page__lead {
-  color: var(--color-text-muted);
   font-size: var(--font-size-lg);
 }
 
@@ -207,11 +143,29 @@ a:hover {
   gap: var(--space-6);
 }
 
+.section__title {
+  font-size: var(--font-size-lg);
+}
+
+.section__header {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: baseline;
+  justify-content: space-between;
+  gap: var(--space-4);
+}
+
+.divider {
+  width: var(--divider-width);
+  margin: var(--space-6) auto;
+  border: 0;
+  border-top: var(--border-width) solid var(--color-border);
+}
+
 /* Text */
 
 .eyebrow,
 .meta {
-  margin: 0;
   color: var(--color-text-muted);
   font-family: var(--font-mono);
   font-size: var(--font-size-sm);
@@ -237,7 +191,6 @@ a:hover {
 }
 
 .prose :is(ul, ol) {
-  max-width: var(--text-width);
   margin: 0;
   padding-left: var(--space-6);
   list-style: revert;
@@ -266,7 +219,7 @@ a:hover {
   white-space: nowrap;
 }
 
-/* Components */
+/* Header and footer */
 
 .skip-link {
   position: absolute;
@@ -283,208 +236,222 @@ a:hover {
 }
 
 .site-header {
-  border-bottom: var(--border-width) solid var(--color-border);
-}
-
-.site-header__inner {
   display: flex;
   flex-wrap: wrap;
   align-items: center;
   justify-content: space-between;
   gap: var(--space-4);
-  padding-block: var(--space-4);
+  padding: var(--space-6) var(--space-8);
 }
 
-.site-header__name {
-  color: var(--color-text);
-  font-weight: var(--font-weight-semibold);
+.site-header__mark {
+  color: var(--color-text-strong);
+  font-family: var(--font-mono);
+  font-weight: var(--font-weight-regular);
+  letter-spacing: var(--letter-spacing-label);
   text-decoration: none;
 }
 
-.site-nav,
-.link-list,
-.button-list,
-.site-footer__links {
+.site-nav {
   display: flex;
   flex-wrap: wrap;
+  align-items: center;
   gap: var(--space-2) var(--space-6);
 }
 
+/* Flex list items keep icon links on the same center line as text links,
+   instead of sitting on the text baseline. */
+.site-nav li {
+  display: flex;
+}
+
 .site-nav a {
+  display: inline-flex;
   color: var(--color-text-muted);
-  font-size: var(--font-size-sm);
   text-decoration: none;
 }
 
 .site-nav a:hover {
-  color: var(--color-text);
+  color: var(--color-text-strong);
 }
 
-.hero {
+.icon {
+  width: var(--icon-size);
+  height: var(--icon-size);
+  flex-shrink: 0;
+}
+
+.site-footer {
   display: grid;
-  justify-items: start;
-  gap: var(--space-4);
-  padding-block: var(--space-16) var(--space-8);
-}
-
-.hero__title {
-  font-size: var(--font-size-hero);
-}
-
-.hero__intro {
+  gap: var(--space-2);
+  padding-block: var(--space-8);
   color: var(--color-text-muted);
-  font-size: var(--font-size-lg);
+  font-size: var(--font-size-sm);
 }
 
-.button-list {
+.site-footer a {
+  color: var(--color-text-muted);
+}
+
+.inline-list {
+  display: flex;
+  flex-wrap: wrap;
+  gap: var(--space-2) var(--space-4);
+}
+
+/* Home */
+
+.intro {
+  display: grid;
   gap: var(--space-4);
-  margin-top: var(--space-4);
+  padding-block: var(--space-8) var(--space-2);
 }
 
-.button {
-  display: inline-block;
-  padding: var(--space-3) var(--space-6);
-  border: var(--border-width) solid var(--color-border);
-  border-radius: var(--radius-md);
-  color: var(--color-text);
-  text-decoration: none;
-  transition: background-color var(--transition-fast), border-color var(--transition-fast), color var(--transition-fast);
+.home-section {
+  display: grid;
+  gap: var(--space-6);
+  padding-block: var(--space-4);
 }
 
-.button:hover {
-  border-color: var(--color-accent);
-  color: var(--color-text);
+/* Label/value rows like "Creator of [SailVault] [PineForge]". */
+.chip-rows {
+  display: grid;
+  gap: var(--space-2);
 }
 
-.button--primary {
-  background: var(--color-accent);
-  border-color: var(--color-accent);
-  color: var(--color-on-accent);
+.chip-rows > div {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: var(--space-2);
 }
 
-.button--primary:hover {
-  background: transparent;
-  color: var(--color-text);
+.chips {
+  display: flex;
+  flex-wrap: wrap;
+  gap: var(--space-2);
 }
 
-.card {
-  padding: var(--space-6);
+.chip {
+  display: inline-flex;
+  align-items: center;
+  gap: var(--space-2);
+  padding: var(--space-1) var(--space-2);
   background: var(--color-surface);
   border: var(--border-width) solid var(--color-border);
-  border-radius: var(--radius-md);
-}
-
-/* auto-fit with a wide minimum gives two columns on desktop and one on
-   phones, and lets a single card use the full width. */
-.project-list {
-  display: grid;
-  grid-template-columns: repeat(auto-fit, minmax(min(100%, var(--card-min-width)), 1fr));
-  gap: var(--space-6);
-}
-
-/* The title link stretches over the whole card, so screen readers announce
-   one short link while pointer users can click anywhere on the card. */
-.project-card {
-  position: relative;
-  display: grid;
-  grid-template-rows: auto 1fr;
-  padding: 0;
-  overflow: hidden;
+  border-radius: var(--radius-sm);
+  color: var(--color-text-strong);
+  font-size: var(--font-size-sm);
+  line-height: var(--line-height-tight);
+  text-decoration: none;
   transition: border-color var(--transition-fast);
 }
 
-.project-card:hover,
-.project-card:has(.project-card__link:focus-visible) {
+a.chip:hover {
   border-color: var(--color-accent);
 }
 
-.project-card__cover {
-  aspect-ratio: var(--cover-aspect-ratio);
-  border-bottom: var(--border-width) solid var(--color-border);
+.chip img,
+.chip .icon {
+  width: var(--icon-size);
+  height: var(--icon-size);
 }
 
-.project-card__cover img {
-  display: block;
+.monogram {
+  display: inline-grid;
+  place-items: center;
+  width: var(--icon-size);
+  height: var(--icon-size);
+  border: var(--border-width) solid var(--color-border);
+  border-radius: var(--radius-sm);
+  color: var(--color-text-muted);
+  font-family: var(--font-mono);
+  font-size: var(--font-size-sm);
+}
+
+/* Project grid: two columns in the reading column, more rows as projects
+   are added. The negative margin keeps icons on the text's left edge while
+   the hover background gets room around them. The title link stretches over
+   the whole item, so screen readers announce one short link while pointer
+   users can click anywhere on it. */
+.project-list {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(min(100%, var(--project-min-width)), 1fr));
+  gap: var(--space-2);
+  margin-inline: calc(-1 * var(--space-3));
+}
+
+.project-item {
+  position: relative;
+  display: flex;
+  align-items: flex-start;
+  gap: var(--space-3);
+  padding: var(--space-3);
+  border-radius: var(--radius-md);
+  transition: background-color var(--transition-fast);
+}
+
+.project-item:hover,
+.project-item:has(.project-item__link:focus-visible) {
+  background: var(--color-surface);
+}
+
+.project-item__icon,
+.project-item__icon img {
+  width: var(--project-icon-size);
+  height: var(--project-icon-size);
+}
+
+.project-item__icon .monogram {
   width: 100%;
   height: 100%;
-  object-fit: cover;
+  font-size: var(--font-size-lg);
 }
 
-.project-card__placeholder {
+.project-item__body {
   display: grid;
-  place-items: center;
-  height: 100%;
-  background: var(--color-bg);
-  color: var(--color-border);
-  font-family: var(--font-mono);
-  font-size: var(--font-size-hero);
+  gap: var(--space-1);
 }
 
-.project-card__body {
-  display: flex;
-  flex-direction: column;
-  gap: var(--space-3);
-  padding: var(--space-6);
+.project-item__title {
+  font-size: var(--font-size-base);
 }
 
-.project-card__title {
-  font-size: var(--font-size-xl);
-}
-
-.project-card__link {
-  color: var(--color-text);
+.project-item__link {
   text-decoration: none;
 }
 
-.project-card__link::after {
+.project-item__link::after {
   content: "";
   position: absolute;
   inset: 0;
 }
 
-.project-card__link:focus-visible {
+.project-item__link:focus-visible {
   outline: none;
 }
 
-.project-card__actions {
+/* Project page */
+
+.facts {
   display: flex;
   flex-wrap: wrap;
-  align-items: baseline;
   gap: var(--space-2) var(--space-6);
-  /* Pushes the actions to the bottom so they line up across a row. */
-  margin-top: auto;
-  padding-top: var(--space-2);
 }
 
-/* Only the real links sit above the stretched title link; the cue stays
-   below it, so clicking the cue opens the project like the rest of the
-   card. */
-.project-card__actions a {
-  position: relative;
-  z-index: 1;
+.facts > div {
+  display: grid;
 }
 
-.project-card__cue {
-  color: var(--color-accent);
-  font-weight: var(--font-weight-semibold);
+.facts dt {
+  color: var(--color-text-muted);
+  font-size: var(--font-size-sm);
 }
 
-.project-card__cue::after {
-  content: "\2192";
-  display: inline-block;
-  margin-left: var(--space-2);
-  transition: transform var(--transition-fast);
-}
-
-.project-card:hover .project-card__cue::after,
-.project-card:has(.project-card__link:focus-visible) .project-card__cue::after {
-  transform: translateX(var(--space-1));
-}
-
-.page__cover img {
-  display: block;
+.page__cover img,
+.screenshot-list img {
   width: 100%;
-  height: auto;
+  border: var(--border-width) solid var(--color-border);
   border-radius: var(--radius-md);
 }
 
@@ -494,53 +461,20 @@ a:hover {
   gap: var(--space-6);
 }
 
-.screenshot-list img {
-  display: block;
-  width: 100%;
-  height: auto;
-  border: var(--border-width) solid var(--color-border);
-  border-radius: var(--radius-md);
-}
+/* Devlog */
 
 .devlog-list {
   display: grid;
-  gap: var(--space-8);
+  gap: var(--space-6);
 }
 
 .devlog-item {
   display: grid;
-  gap: var(--space-2);
-}
-
-.devlog-item__title {
-  font-size: var(--font-size-lg);
-}
-
-.certification-list {
-  display: grid;
-  gap: var(--space-4);
-  margin-top: var(--space-4);
-}
-
-.certification {
-  display: grid;
   gap: var(--space-1);
 }
 
-.certification__name {
-  font-weight: var(--font-weight-semibold);
-}
-
-.site-footer {
-  border-top: var(--border-width) solid var(--color-border);
-  color: var(--color-text-muted);
-  font-size: var(--font-size-sm);
-}
-
-.site-footer__inner {
-  display: grid;
-  gap: var(--space-4);
-  padding-block: var(--space-12);
+.devlog-item__title {
+  font-size: var(--font-size-base);
 }
 
 @media (prefers-reduced-motion: reduce) {

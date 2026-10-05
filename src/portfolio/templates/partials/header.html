@@ -1,15 +1,16 @@
+{% from "partials/icons.html" import icon %}
 <header class="site-header">
-  <div class="container site-header__inner">
-    <a class="site-header__name" href="/">Tobias Kaminski</a>
-    <nav aria-label="Main">
-      <ul class="site-nav">
-        <li><a href="/#projects">Projects</a></li>
-        {% if has_devlog %}
-        <li><a href="/devlog">Devlog</a></li>
-        {% endif %}
-        <li><a href="/#about">About</a></li>
-        <li><a href="{{ github_profile_url }}">GitHub</a></li>
-      </ul>
-    </nav>
-  </div>
+  <a class="site-header__mark" href="/" aria-label="Tobias Kaminski, home">TK</a>
+  <nav aria-label="Main">
+    <ul class="site-nav">
+      <li><a href="/#projects">Projects</a></li>
+      {% if has_devlog %}
+      <li><a href="/devlog">Devlog</a></li>
+      {% endif %}
+      <li><a href="{{ github_profile_url }}">{{ icon("github") }}<span class="visually-hidden">GitHub</span></a></li>
+      {% if has_devlog %}
+      <li><a href="/feed.xml">{{ icon("feed") }}<span class="visually-hidden">Atom feed</span></a></li>
+      {% endif %}
+    </ul>
+  </nav>
 </header>

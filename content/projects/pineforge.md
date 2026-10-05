@@ -7,7 +7,7 @@ tags: [Rust, Embassy]
 license: MIT OR Apache-2.0
 repository: https://github.com/tordenskjoldsw/PineForge
 download: https://github.com/tordenskjoldsw/PineForge/releases/latest
-# TODO(content): cover image (photo of the watch running PineForge)
+# TODO(content): icon and cover image (photo of the watch running PineForge)
 ---
 
 PineForge is an independent firmware for the PineTime, written in Rust

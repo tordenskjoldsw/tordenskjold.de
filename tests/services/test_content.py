@@ -120,6 +120,16 @@ def test_missing_image_fails(sample_content_dir: Path) -> None:
         load_content(sample_content_dir, STATIC_DIR)
 
 
+def test_missing_icon_fails(sample_content_dir: Path) -> None:
+    icon = "\nicon: img/missing.svg"
+    write_entry(
+        sample_content_dir / "projects", "iconic", PROJECT.format(order=1) + icon
+    )
+
+    with pytest.raises(ContentError, match=r"missing image img/missing\.svg"):
+        load_content(sample_content_dir, STATIC_DIR)
+
+
 def test_devlog_with_unknown_project_fails(sample_content_dir: Path) -> None:
     write_entry(
         sample_content_dir / "devlog",

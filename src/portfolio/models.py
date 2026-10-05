@@ -27,6 +27,8 @@ class Project(ContentModel):
     license: str | None = None
     repository: HttpUrl | None = None
     download: HttpUrl | None = None
+    # Square, decorative next to the name, so it needs no alt text.
+    icon: str | None = Field(default=None, min_length=1)
     cover: Image | None = None
     screenshots: tuple[Image, ...] = ()
     body_html: str

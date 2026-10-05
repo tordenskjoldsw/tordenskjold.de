@@ -2,55 +2,46 @@
 <img src="{{ static_url(img.path) }}" alt="{{ img.alt }}" width="{{ img.width }}" height="{{ img.height }}" loading="{{ 'eager' if eager else 'lazy' }}" decoding="async">
 {% endmacro %}
 
+{# Decorative: the project name always stands next to it. #}
+{% macro project_icon(project) %}
+{% if project.icon %}
+<img src="{{ static_url(project.icon) }}" alt="" width="40" height="40" decoding="async">
+{% else %}
+<span class="monogram" aria-hidden="true">{{ project.title[0] }}</span>
+{% endif %}
+{% endmacro %}
+
+{% macro project_chip(project) %}
+<a class="chip" href="/projects/{{ project.slug }}">{{ project_icon(project) }}{{ project.title }}</a>
+{% endmacro %}
+
 {% macro project_links(project) %}
 {% if project.download or project.repository %}
-<ul class="link-list">
+<ul class="chips">
   {% if project.download %}
-  <li><a href="{{ project.download }}">Download<span class="visually-hidden"> {{ project.title }}</span></a></li>
+  <li><a class="chip" href="{{ project.download }}">Download<span class="visually-hidden"> {{ project.title }}</span></a></li>
   {% endif %}
   {% if project.repository %}
-  <li><a href="{{ project.repository }}">Source code<span class="visually-hidden"> of {{ project.title }}</span></a></li>
+  <li><a class="chip" href="{{ project.repository }}">Source code<span class="visually-hidden"> of {{ project.title }}</span></a></li>
   {% endif %}
 </ul>
 {% endif %}
 {% endmacro %}
 
-{% macro project_meta(project, stats=none) %}
-{% if stats and stats.latest_release %}
-<p class="meta">Latest release: {{ stats.latest_release.tag_name }}</p>
-{% endif %}
-{% if project.tags %}
-<p class="meta">{{ project.tags | join(" · ") }}</p>
-{% endif %}
-{% if project.license %}
-<p class="meta">License: {{ project.license }}</p>
-{% endif %}
-{% endmacro %}
-
-{% macro project_card(project, stats=none, eager=false) %}
-<article class="card project-card">
-  <div class="project-card__cover">
-    {% if project.cover %}
-    {{ image(project.cover, eager) }}
-    {% else %}
-    {# Placeholder keeps cards in a row the same height until a cover exists. #}
-    <span class="project-card__placeholder" aria-hidden="true">{{ project.title }}</span>
-    {% endif %}
-  </div>
-  <div class="project-card__body">
-    <p class="eyebrow">{{ project.platform }}</p>
-    <h3 class="project-card__title">
-      <a class="project-card__link" href="/projects/{{ project.slug }}">{{ project.title }}</a>
+{% macro project_item(project, stats=none) %}
+<li class="project-item">
+  <span class="project-item__icon">{{ project_icon(project) }}</span>
+  <div class="project-item__body">
+    <h3 class="project-item__title">
+      <a class="project-item__link" href="/projects/{{ project.slug }}">{{ project.title }}</a>
     </h3>
     <p class="muted">{{ project.summary }}</p>
-    {{ project_meta(project, stats) }}
-    <div class="project-card__actions">
-      {# Visual cue only: the title link already names the target for screen readers. #}
-      <span class="project-card__cue" aria-hidden="true">View project</span>
-      {{ project_links(project) }}
-    </div>
+    <p class="meta">
+      {{ project.platform }}{% for tag in project.tags %} · {{ tag }}{% endfor %}
+      {% if stats and stats.latest_release %} · {{ stats.latest_release.tag_name }}{% endif %}
+    </p>
   </div>
-</article>
+</li>
 {% endmacro %}
 
 {% macro devlog_list(entries, heading_level=3) %}

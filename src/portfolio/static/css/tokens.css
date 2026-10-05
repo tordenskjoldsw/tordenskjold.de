@@ -1,12 +1,17 @@
 :root {
-  /* Colors: one accent, everything else greyscale. Text pairs meet 4.5:1. */
-  --color-bg: #0b0d10;
-  --color-surface: #12161b;
-  --color-border: #232a32;
-  --color-text: #e8ecf0;
-  --color-text-muted: #9aa5b1;
+  /* Colors are named by role, not by value. A light theme only has to
+     redefine this block, for example in a prefers-color-scheme: light
+     media query. Text colors meet 4.5:1 on both background and surface. */
+  --color-bg: #0a0a0a;
+  --color-surface: #161616;
+  --color-border: #2a2a2a;
+  --color-dot: #262626;
+  --color-text: #d4d4d4;
+  --color-text-strong: #fafafa;
+  --color-text-muted: #a3a3a3;
+  --color-link-underline: #525252;
   --color-accent: #38bdf8;
-  --color-on-accent: #0b0d10;
+  --color-on-accent: #0a0a0a;
 
   /* Typography: the root size grows slightly on wide screens; percentages
      keep the user's browser font setting in effect. */
@@ -18,10 +23,9 @@
   --font-size-sm: 0.875rem;
   --font-size-base: 1rem;
   --font-size-lg: 1.25rem;
-  --font-size-xl: 1.75rem;
-  --font-size-hero: clamp(2.5rem, 6vw, 4rem);
-  --line-height-tight: 1.15;
-  --line-height-base: 1.6;
+  --font-size-title: clamp(2rem, 5vw, 2.5rem);
+  --line-height-tight: 1.2;
+  --line-height-base: 1.7;
   --letter-spacing-label: 0.08em;
 
   /* Spacing */
@@ -33,18 +37,18 @@
   --space-8: 2rem;
   --space-12: 3rem;
   --space-16: 4rem;
-  --space-24: 6rem;
 
-  /* Layout */
-  --content-width: 70rem;
-  --text-width: 40rem;
-  --article-width: 42rem;
-  --aside-width: 16rem;
-  --card-min-width: 26rem;
-  --cover-aspect-ratio: 2 / 1;
-  --column-min-width: 18rem;
+  /* Layout: one reading column on every page, images included, so all
+     content shares the same left edge. */
+  --column-width: 42rem;
   --screenshot-width: 12rem;
   --gutter: var(--space-4);
+  --icon-size: 1.25em;
+  --project-icon-size: 2.5rem;
+  --project-min-width: 18rem;
+  --dot-spacing: 1.5rem;
+  --dot-radius: 1px;
+  --divider-width: 3rem;
 
   /* Shape */
   --border-width: 1px;

@@ -6,7 +6,7 @@ from fastapi import Request
 from markdown_it import MarkdownIt
 from pydantic import BaseModel, TypeAdapter, ValidationError
 
-from portfolio.models import Certification, DevlogEntry, Image, Project, SiteContent
+from portfolio.models import Certification, DevlogEntry, Project, SiteContent
 
 FRONT_MATTER_PATTERN = re.compile(
     r"\A---\n(?P<yaml>.*?)\n---(?:\n(?P<body>.*))?\Z", re.DOTALL
@@ -92,12 +92,14 @@ def _load_entry[EntryT: BaseModel](path: Path, model: type[EntryT]) -> EntryT:
 
 
 def _check_images_exist(project: Project, static_dir: Path) -> None:
-    images: list[Image] = list(project.screenshots)
+    paths = [image.path for image in project.screenshots]
     if project.cover is not None:
-        images.append(project.cover)
-    for image in images:
-        if not (static_dir / image.path).is_file():
-            raise ContentError(f"project '{project.slug}': missing image {image.path}")
+        paths.append(project.cover.path)
+    if project.icon is not None:
+        paths.append(project.icon)
+    for path in paths:
+        if not (static_dir / path).is_file():
+            raise ContentError(f"project '{project.slug}': missing image {path}")
 
 
 def _parse_yaml(text: str, path: Path) -> object:

@@ -1,6 +1,6 @@
-from fastapi.testclient import TestClient
+import re
 
-SECTION_IDS = ["projects", "about"]
+from fastapi.testclient import TestClient
 
 
 def test_home_renders_content(client: TestClient) -> None:
@@ -9,15 +9,15 @@ def test_home_renders_content(client: TestClient) -> None:
     assert response.status_code == 200
     assert "SailVault" in response.text
     assert "PineForge" in response.text
-    assert "https://github.com/tordenskjoldsw/PineForge" in response.text
     assert "4A0-100" in response.text
+    assert 'href="https://www.credly.com/badges/' in response.text
 
 
-def test_project_cards_show_platform(client: TestClient) -> None:
+def test_project_list_shows_platform_and_tech(client: TestClient) -> None:
     html = client.get("/").text
 
-    assert html.index("Sailfish OS") < html.index("SailVault")
-    assert html.index("PineTime") < html.index("PineForge")
+    assert "Sailfish OS · Rust · C++ · Qt · QML" in html
+    assert "PineTime · Rust · Embassy" in html
 
 
 def test_home_links_project_detail_pages(client: TestClient) -> None:
@@ -27,10 +27,13 @@ def test_home_links_project_detail_pages(client: TestClient) -> None:
     assert 'href="/projects/pineforge"' in html
 
 
-def test_project_card_cue_is_hidden_from_screen_readers(client: TestClient) -> None:
+def test_project_icons_are_decorative(client: TestClient) -> None:
     html = client.get("/").text
 
-    assert '<span class="project-card__cue" aria-hidden="true">' in html
+    assert re.search(
+        r'<img src="/static/img/projects/sailvault/icon\.svg\?v=\w+" alt=""', html
+    )
+    assert '<span class="monogram" aria-hidden="true">P</span>' in html
 
 
 def test_home_links_github_profile(client: TestClient) -> None:
@@ -48,7 +51,7 @@ def test_home_has_single_h1(client: TestClient) -> None:
 def test_home_sections_in_order(sample_client: TestClient) -> None:
     html = sample_client.get("/").text
 
-    positions = [html.index(f'id="{id_}"') for id_ in ["projects", "devlog", "about"]]
+    positions = [html.index(f'id="{id_}"') for id_ in ["about", "projects", "devlog"]]
 
     assert positions == sorted(positions)
 
@@ -83,6 +86,7 @@ def test_project_page_renders(client: TestClient) -> None:
     assert response.text.count("<h1") == 1
     assert "KeePass-compatible password manager" in response.text
     assert "<dd>MIT</dd>" in response.text
+    assert 'href="https://github.com/tordenskjoldsw/harbour-sailvault"' in response.text
     assert "screenshot-1-entries.jpg" in response.text
 
 

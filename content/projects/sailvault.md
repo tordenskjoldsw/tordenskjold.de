@@ -6,6 +6,7 @@ order: 1
 tags: [Rust, C++, Qt, QML]
 license: MIT
 repository: https://github.com/tordenskjoldsw/harbour-sailvault
+icon: img/projects/sailvault/icon.svg
 cover:
   path: img/projects/sailvault/cover.png
   alt: "SailVault: password manager for Sailfish OS"
