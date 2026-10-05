@@ -87,10 +87,12 @@ def test_project_page_lists_its_devlog(sample_client: TestClient) -> None:
     assert "Older entry" not in html
 
 
-def test_unknown_project_returns_404(client: TestClient) -> None:
+def test_unknown_project_returns_404_page(client: TestClient) -> None:
     response = client.get("/projects/does-not-exist")
 
     assert response.status_code == 404
+    assert response.headers["content-type"].startswith("text/html")
+    assert "Page not found" in response.text
 
 
 def test_stylesheet_is_served(client: TestClient) -> None:

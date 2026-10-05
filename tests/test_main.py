@@ -34,3 +34,18 @@ def test_invalid_content_fails_startup(settings: Settings, tmp_path: Path) -> No
 
     with pytest.raises(ContentError), TestClient(create_app(broken)):
         pass
+
+
+def test_server_error_shows_error_page(settings: Settings) -> None:
+    app = create_app(settings)
+
+    @app.get("/boom")
+    async def boom() -> None:
+        raise RuntimeError("internal detail")
+
+    with TestClient(app, raise_server_exceptions=False) as client:
+        response = client.get("/boom")
+
+    assert response.status_code == 500
+    assert "Something went wrong" in response.text
+    assert "internal detail" not in response.text
