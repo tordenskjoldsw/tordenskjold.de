@@ -76,7 +76,7 @@ def test_project_page_renders(client: TestClient) -> None:
     assert response.status_code == 200
     assert response.text.count("<h1") == 1
     assert "KeePass-compatible password manager" in response.text
-    assert "License: MIT" in response.text
+    assert "<dd>MIT</dd>" in response.text
     assert "screenshot-1-entries.jpg" in response.text
 
 

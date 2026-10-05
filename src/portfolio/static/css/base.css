@@ -34,6 +34,7 @@
 }
 
 html {
+  font-size: var(--font-size-root);
   scroll-behavior: smooth;
 }
 
@@ -121,10 +122,69 @@ a:hover {
   align-items: start;
 }
 
+/* Single-column pages keep cover, text and screenshots in one centered
+   reading column instead of a narrow text strip in a wide container. */
 .page {
   display: grid;
   gap: var(--space-8);
+  max-width: calc(var(--article-width) + 2 * var(--gutter));
   padding-block: var(--space-12);
+}
+
+.page :is(p, ul, ol) {
+  max-width: none;
+}
+
+.project-page {
+  display: grid;
+  gap: var(--space-8);
+  padding-block: var(--space-12);
+}
+
+/* Sidebar layout without media queries: the aside wraps above the text as
+   soon as both no longer fit side by side. row-reverse puts the aside,
+   which comes first in the markup, on the right on wide screens. */
+.with-sidebar {
+  display: flex;
+  flex-direction: row-reverse;
+  flex-wrap: wrap;
+  justify-content: space-between;
+  align-items: flex-start;
+  gap: var(--space-12);
+}
+
+.with-sidebar > aside {
+  flex: 1 1 var(--aside-width);
+}
+
+.with-sidebar > .prose {
+  flex: 999 1 0;
+  min-width: min(100%, var(--article-width));
+  max-width: var(--article-width);
+}
+
+.with-sidebar > .prose :is(p, ul, ol) {
+  max-width: none;
+}
+
+.project-facts {
+  display: grid;
+  gap: var(--space-4);
+}
+
+.facts {
+  display: grid;
+  gap: var(--space-1);
+  margin: 0;
+}
+
+.facts dt {
+  color: var(--color-text-muted);
+  font-size: var(--font-size-sm);
+}
+
+.facts dd {
+  margin: 0 0 var(--space-3);
 }
 
 .page__header {

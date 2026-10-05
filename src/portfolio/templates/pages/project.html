@@ -1,5 +1,5 @@
 {% extends "base.html" %}
-{% from "partials/macros.html" import image, project_links, project_meta, devlog_list %}
+{% from "partials/macros.html" import image, project_links, devlog_list %}
 
 {% block title %}{{ project.title }} - Tobias Kaminski{% endblock %}
 {% block description %}{{ project.summary }}{% endblock %}
@@ -13,23 +13,40 @@
 {% endblock %}
 
 {% block content %}
-<article class="container page">
+<article class="container project-page">
   <p><a href="/#projects">All projects</a></p>
 
   <header class="page__header">
     <p class="eyebrow">{{ project.platform }}</p>
     <h1 class="page__title">{{ project.title }}</h1>
     <p class="page__lead">{{ project.summary }}</p>
-    {{ project_meta(project) }}
-    {{ project_links(project) }}
   </header>
 
   {% if project.cover %}
   <div class="page__cover">{{ image(project.cover, eager=true) }}</div>
   {% endif %}
 
-  <div class="prose">
-    {{ project.body_html | safe }}
+  {# The facts box comes first so it sits above the text on narrow screens. #}
+  <div class="with-sidebar">
+    <aside class="card project-facts" aria-labelledby="facts-title">
+      <h2 class="eyebrow" id="facts-title">Project</h2>
+      <dl class="facts">
+        <dt>Platform</dt>
+        <dd>{{ project.platform }}</dd>
+        {% if project.tags %}
+        <dt>Tech</dt>
+        <dd>{{ project.tags | join(" · ") }}</dd>
+        {% endif %}
+        {% if project.license %}
+        <dt>License</dt>
+        <dd>{{ project.license }}</dd>
+        {% endif %}
+      </dl>
+      {{ project_links(project) }}
+    </aside>
+    <div class="prose">
+      {{ project.body_html | safe }}
+    </div>
   </div>
 
   {% if project.screenshots %}

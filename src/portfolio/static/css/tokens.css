@@ -8,7 +8,9 @@
   --color-accent: #38bdf8;
   --color-on-accent: #0b0d10;
 
-  /* Typography */
+  /* Typography: the root size grows slightly on wide screens; percentages
+     keep the user's browser font setting in effect. */
+  --font-size-root: clamp(100%, 90% + 0.25vw, 112.5%);
   --font-sans: "Inter", system-ui, sans-serif;
   --font-mono: "JetBrains Mono", ui-monospace, monospace;
   --font-weight-regular: 400;
@@ -36,8 +38,10 @@
   /* Layout */
   --content-width: 70rem;
   --text-width: 40rem;
+  --article-width: 42rem;
+  --aside-width: 16rem;
   --column-min-width: 18rem;
-  --screenshot-width: 14rem;
+  --screenshot-width: 12rem;
   --gutter: var(--space-4);
 
   /* Shape */
