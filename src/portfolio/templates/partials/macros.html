@@ -1,19 +1,53 @@
-{% macro section_heading(number, title, id) %}
-<h2 class="section-heading" id="{{ id }}">
-  <span class="section-heading__number">{{ number }}</span>
-  {{ title }}
-</h2>
+{% macro image(img, eager=false) %}
+<img src="{{ static_url(img.path) }}" alt="{{ img.alt }}" width="{{ img.width }}" height="{{ img.height }}" loading="{{ 'eager' if eager else 'lazy' }}" decoding="async">
 {% endmacro %}
 
-{% macro project_card(project) %}
-<article class="card project-card">
-  <h3 class="project-card__title">{{ project.title }}</h3>
-  <p class="project-card__summary">{{ project.summary }}</p>
-  {% if project.license %}
-  <p class="meta">{{ project.license }}</p>
+{% macro project_links(project) %}
+{% if project.download or project.repository %}
+<ul class="link-list">
+  {% if project.download %}
+  <li><a href="{{ project.download }}">Download<span class="visually-hidden"> {{ project.title }}</span></a></li>
   {% endif %}
   {% if project.repository %}
-  <p><a href="{{ project.repository }}">Repository</a></p>
+  <li><a href="{{ project.repository }}">Source code<span class="visually-hidden"> of {{ project.title }}</span></a></li>
   {% endif %}
+</ul>
+{% endif %}
+{% endmacro %}
+
+{% macro project_meta(project) %}
+{% if project.tags %}
+<p class="meta">{{ project.tags | join(" · ") }}</p>
+{% endif %}
+{% if project.license %}
+<p class="meta">License: {{ project.license }}</p>
+{% endif %}
+{% endmacro %}
+
+{% macro project_card(project, eager=false) %}
+<article class="card project-card{% if project.cover %} project-card--with-cover{% endif %}">
+  {% if project.cover %}
+  <div class="project-card__cover">{{ image(project.cover, eager) }}</div>
+  {% endif %}
+  <div class="project-card__body">
+    <h4 class="project-card__title">
+      <a class="project-card__link" href="/projects/{{ project.slug }}">{{ project.title }}</a>
+    </h4>
+    <p class="muted">{{ project.summary }}</p>
+    {{ project_meta(project) }}
+    <div class="project-card__actions">{{ project_links(project) }}</div>
+  </div>
 </article>
+{% endmacro %}
+
+{% macro devlog_list(entries, heading_level=3) %}
+<ul class="devlog-list">
+  {% for entry in entries %}
+  <li class="devlog-item">
+    <time class="meta" datetime="{{ entry.date.isoformat() }}">{{ entry.date.isoformat() }}</time>
+    <h{{ heading_level }} class="devlog-item__title"><a href="/devlog/{{ entry.slug }}">{{ entry.title }}</a></h{{ heading_level }}>
+    <p class="muted">{{ entry.summary }}</p>
+  </li>
+  {% endfor %}
+</ul>
 {% endmacro %}

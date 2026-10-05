@@ -1,58 +1,65 @@
 {% extends "base.html" %}
-{% from "partials/macros.html" import section_heading, project_card %}
+{% from "partials/macros.html" import project_card, devlog_list %}
 
 {% block title %}Tobias Kaminski - Networking & Open Source{% endblock %}
-{% block description %}Tobias Kaminski: networking and private open-source projects such as SailVault and PineForge.{% endblock %}
+{% block description %}Tobias Kaminski: open-source projects for Sailfish OS and PineTime, such as SailVault and PineForge.{% endblock %}
 
 {% block content %}
 <section class="hero container" aria-labelledby="hero-title">
+  <p class="eyebrow">Networking · Open source</p>
   <h1 class="hero__title" id="hero-title">Tobias Kaminski</h1>
   <p class="hero__intro">TODO(content): introduction sentence</p>
-  <a class="button" href="#projects">View projects</a>
-</section>
-
-<section class="section container" id="projects" aria-labelledby="projects-title">
-  {{ section_heading("01", "Projects", "projects-title") }}
-  <div class="project-list">
-    {% for project in projects %}
-    {{ project_card(project) }}
-    {% endfor %}
-  </div>
-</section>
-
-<section class="section container" id="engineering" aria-labelledby="engineering-title">
-  {{ section_heading("02", "Engineering", "engineering-title") }}
-  <div class="columns">
-    <article class="card">
-      <h3>Networking</h3>
-      <p>TODO(content): networking focus</p>
-      <p><a href="#certifications">Certifications</a></p>
-    </article>
-    <article class="card">
-      <h3>Software</h3>
-      <p>TODO(content): software focus</p>
-      <p><a href="#projects">Projects</a></p>
-    </article>
-  </div>
-</section>
-
-<section class="section container" id="certifications" aria-labelledby="certifications-title">
-  {{ section_heading("03", "Certifications", "certifications-title") }}
-  <ul class="certification-list">
-    {% for certification in certifications %}
-    <li class="card certification">
-      <span class="certification__name">{{ certification.name }}</span>
-      <span class="meta">{{ certification.exam_code }} · {{ certification.issuer }}</span>
-      {% if certification.credential_url %}
-      <a href="{{ certification.credential_url }}">Verify credential</a>
-      {% endif %}
-    </li>
-    {% endfor %}
+  <ul class="button-list">
+    <li><a class="button button--primary" href="#projects">Projects</a></li>
+    <li><a class="button" href="{{ github_profile_url }}">GitHub</a></li>
   </ul>
 </section>
 
+<section class="section container" id="projects" aria-labelledby="projects-title">
+  <h2 class="section__title" id="projects-title">Projects</h2>
+  {% for group in platform_groups %}
+  {% set first_group = loop.first %}
+  <div class="platform-group">
+    <h3 class="eyebrow">{{ group.platform }}</h3>
+    <div class="project-list">
+      {% for project in group.projects %}
+      {{ project_card(project, eager=first_group and loop.first) }}
+      {% endfor %}
+    </div>
+  </div>
+  {% endfor %}
+</section>
+
+{% if latest_devlog %}
+<section class="section container" id="devlog" aria-labelledby="devlog-title">
+  <div class="section__header">
+    <h2 class="section__title" id="devlog-title">Devlog</h2>
+    <a href="/devlog">All entries</a>
+  </div>
+  {{ devlog_list(latest_devlog) }}
+</section>
+{% endif %}
+
 <section class="section container" id="about" aria-labelledby="about-title">
-  {{ section_heading("04", "About", "about-title") }}
-  <p>TODO(content): about text</p>
+  <h2 class="section__title" id="about-title">About</h2>
+  <div class="columns">
+    <div class="prose">
+      <p>TODO(content): about text</p>
+    </div>
+    <aside class="card" aria-labelledby="certifications-title">
+      <h3 class="eyebrow" id="certifications-title">Certifications</h3>
+      <ul class="certification-list">
+        {% for certification in certifications %}
+        <li class="certification">
+          <span class="certification__name">{{ certification.name }}</span>
+          <span class="meta">{{ certification.exam_code }} · {{ certification.issuer }}</span>
+          {% if certification.credential_url %}
+          <a href="{{ certification.credential_url }}">Verify credential<span class="visually-hidden"> {{ certification.name }}</span></a>
+          {% endif %}
+        </li>
+        {% endfor %}
+      </ul>
+    </aside>
+  </div>
 </section>
 {% endblock %}

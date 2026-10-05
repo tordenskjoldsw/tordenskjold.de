@@ -1,4 +1,6 @@
-from pydantic import BaseModel, ConfigDict, Field, HttpUrl
+import datetime
+
+from pydantic import BaseModel, ConfigDict, Field, HttpUrl, PositiveInt
 
 # Slugs end up in URLs, so keep them lowercase and hyphen-separated.
 SLUG_PATTERN = r"^[a-z0-9]+(-[a-z0-9]+)*$"
@@ -8,13 +10,40 @@ class ContentModel(BaseModel):
     model_config = ConfigDict(frozen=True, extra="forbid")
 
 
+class Image(ContentModel):
+    path: str = Field(min_length=1, description="Relative to the static dir")
+    alt: str = Field(min_length=1)
+    width: PositiveInt
+    height: PositiveInt
+
+
 class Project(ContentModel):
     slug: str = Field(pattern=SLUG_PATTERN)
     title: str = Field(min_length=1)
     summary: str = Field(min_length=1)
+    platform: str = Field(min_length=1)
     order: int
+    tags: tuple[str, ...] = ()
     license: str | None = None
     repository: HttpUrl | None = None
+    download: HttpUrl | None = None
+    cover: Image | None = None
+    screenshots: tuple[Image, ...] = ()
+    body_html: str
+
+
+class PlatformGroup(ContentModel):
+    platform: str
+    projects: tuple[Project, ...]
+
+
+class DevlogEntry(ContentModel):
+    slug: str = Field(pattern=SLUG_PATTERN)
+    title: str = Field(min_length=1)
+    summary: str = Field(min_length=1)
+    date: datetime.date
+    project: str | None = Field(default=None, pattern=SLUG_PATTERN)
+    body_html: str
 
 
 class Certification(ContentModel):
@@ -26,4 +55,24 @@ class Certification(ContentModel):
 
 class SiteContent(ContentModel):
     projects: tuple[Project, ...]
+    devlog: tuple[DevlogEntry, ...]
     certifications: tuple[Certification, ...]
+
+    def project(self, slug: str) -> Project | None:
+        return next((p for p in self.projects if p.slug == slug), None)
+
+    def devlog_entry(self, slug: str) -> DevlogEntry | None:
+        return next((e for e in self.devlog if e.slug == slug), None)
+
+    def devlog_for(self, project: Project) -> tuple[DevlogEntry, ...]:
+        return tuple(e for e in self.devlog if e.project == project.slug)
+
+    def projects_by_platform(self) -> tuple[PlatformGroup, ...]:
+        # dict keeps insertion order, so platforms follow the project order.
+        groups: dict[str, list[Project]] = {}
+        for project in self.projects:
+            groups.setdefault(project.platform, []).append(project)
+        return tuple(
+            PlatformGroup(platform=platform, projects=tuple(projects))
+            for platform, projects in groups.items()
+        )

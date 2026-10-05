@@ -1,0 +1,45 @@
+{% extends "base.html" %}
+{% from "partials/macros.html" import image, project_links, project_meta, devlog_list %}
+
+{% block title %}{{ project.title }} - Tobias Kaminski{% endblock %}
+{% block description %}{{ project.summary }}{% endblock %}
+
+{% block content %}
+<article class="container page">
+  <p><a href="/#projects">All projects</a></p>
+
+  <header class="page__header">
+    <p class="eyebrow">{{ project.platform }}</p>
+    <h1 class="page__title">{{ project.title }}</h1>
+    <p class="page__lead">{{ project.summary }}</p>
+    {{ project_meta(project) }}
+    {{ project_links(project) }}
+  </header>
+
+  {% if project.cover %}
+  <div class="page__cover">{{ image(project.cover, eager=true) }}</div>
+  {% endif %}
+
+  <div class="prose">
+    {{ project.body_html | safe }}
+  </div>
+
+  {% if project.screenshots %}
+  <section class="page__section" aria-labelledby="screenshots-title">
+    <h2 id="screenshots-title">Screenshots</h2>
+    <ul class="screenshot-list">
+      {% for screenshot in project.screenshots %}
+      <li>{{ image(screenshot) }}</li>
+      {% endfor %}
+    </ul>
+  </section>
+  {% endif %}
+
+  {% if devlog %}
+  <section class="page__section" aria-labelledby="devlog-title">
+    <h2 id="devlog-title">Devlog</h2>
+    {{ devlog_list(devlog) }}
+  </section>
+  {% endif %}
+</article>
+{% endblock %}

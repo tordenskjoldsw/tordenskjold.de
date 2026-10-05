@@ -46,7 +46,8 @@ body {
 
 h1,
 h2,
-h3 {
+h3,
+h4 {
   margin: 0;
   font-weight: var(--font-weight-semibold);
   line-height: var(--line-height-tight);
@@ -89,19 +90,115 @@ a:hover {
 }
 
 .section {
-  padding-block: var(--space-16);
-  border-top: var(--border-width) solid var(--color-border);
+  padding-block: var(--space-12);
 }
 
-.columns,
-.project-list,
-.certification-list {
+.section__header {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: baseline;
+  justify-content: space-between;
+  gap: var(--space-4);
+  margin-bottom: var(--space-8);
+}
+
+.section__title {
+  margin-bottom: var(--space-8);
+  font-size: var(--font-size-xl);
+}
+
+.section__header .section__title {
+  margin-bottom: 0;
+}
+
+.columns {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(min(100%, var(--column-min-width)), 1fr));
+  gap: var(--space-8);
+  align-items: start;
+}
+
+.page {
+  display: grid;
+  gap: var(--space-8);
+  padding-block: var(--space-12);
+}
+
+.page__header {
+  display: grid;
+  justify-items: start;
+  gap: var(--space-3);
+}
+
+.page__title {
+  font-size: var(--font-size-hero);
+}
+
+.page__lead {
+  color: var(--color-text-muted);
+  font-size: var(--font-size-lg);
+}
+
+.page__section {
   display: grid;
   gap: var(--space-6);
 }
 
-.columns {
-  grid-template-columns: repeat(auto-fit, minmax(min(100%, var(--column-min-width)), 1fr));
+/* Text */
+
+.eyebrow,
+.meta {
+  margin: 0;
+  color: var(--color-text-muted);
+  font-family: var(--font-mono);
+  font-size: var(--font-size-sm);
+  font-weight: var(--font-weight-regular);
+  letter-spacing: var(--letter-spacing-label);
+}
+
+.eyebrow {
+  text-transform: uppercase;
+}
+
+.muted {
+  color: var(--color-text-muted);
+}
+
+.prose {
+  display: grid;
+  gap: var(--space-4);
+}
+
+.prose :is(h2, h3) {
+  margin-top: var(--space-4);
+}
+
+.prose :is(ul, ol) {
+  padding-left: var(--space-6);
+  list-style: revert;
+}
+
+.prose pre {
+  margin: 0;
+  padding: var(--space-4);
+  overflow-x: auto;
+  background: var(--color-surface);
+  border: var(--border-width) solid var(--color-border);
+  border-radius: var(--radius-md);
+}
+
+.prose code {
+  font-family: var(--font-mono);
+  font-size: var(--font-size-sm);
+}
+
+.visually-hidden {
+  position: absolute;
+  width: 1px;
+  height: 1px;
+  overflow: hidden;
+  clip-path: inset(50%);
+  white-space: nowrap;
 }
 
 /* Components */
@@ -139,7 +236,10 @@ a:hover {
   text-decoration: none;
 }
 
-.site-nav {
+.site-nav,
+.link-list,
+.button-list,
+.site-footer__links {
   display: flex;
   flex-wrap: wrap;
   gap: var(--space-2) var(--space-6);
@@ -158,8 +258,8 @@ a:hover {
 .hero {
   display: grid;
   justify-items: start;
-  gap: var(--space-6);
-  padding-block: var(--space-24);
+  gap: var(--space-4);
+  padding-block: var(--space-16) var(--space-8);
 }
 
 .hero__title {
@@ -171,57 +271,156 @@ a:hover {
   font-size: var(--font-size-lg);
 }
 
+.button-list {
+  gap: var(--space-4);
+  margin-top: var(--space-4);
+}
+
 .button {
   display: inline-block;
   padding: var(--space-3) var(--space-6);
-  border: var(--border-width) solid var(--color-accent);
+  border: var(--border-width) solid var(--color-border);
   border-radius: var(--radius-md);
+  color: var(--color-text);
   text-decoration: none;
-  transition: background-color var(--transition-fast), color var(--transition-fast);
+  transition: background-color var(--transition-fast), border-color var(--transition-fast), color var(--transition-fast);
 }
 
 .button:hover {
+  border-color: var(--color-accent);
+  color: var(--color-text);
+}
+
+.button--primary {
   background: var(--color-accent);
+  border-color: var(--color-accent);
   color: var(--color-on-accent);
 }
 
-.section-heading {
-  display: flex;
-  align-items: baseline;
-  gap: var(--space-4);
-  margin-bottom: var(--space-8);
-  font-size: var(--font-size-xl);
-}
-
-.section-heading__number,
-.meta {
-  color: var(--color-text-muted);
-  font-family: var(--font-mono);
-  font-size: var(--font-size-sm);
-  font-weight: var(--font-weight-regular);
-  letter-spacing: var(--letter-spacing-label);
+.button--primary:hover {
+  background: transparent;
+  color: var(--color-text);
 }
 
 .card {
-  display: grid;
-  align-content: start;
-  gap: var(--space-3);
   padding: var(--space-6);
   background: var(--color-surface);
   border: var(--border-width) solid var(--color-border);
   border-radius: var(--radius-md);
 }
 
+.platform-group {
+  display: grid;
+  gap: var(--space-4);
+}
+
+.platform-group + .platform-group {
+  margin-top: var(--space-12);
+}
+
+.project-list {
+  display: grid;
+  gap: var(--space-6);
+}
+
+/* The title link stretches over the whole card, so screen readers announce
+   one short link while pointer users can click anywhere on the card. */
 .project-card {
+  position: relative;
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(min(100%, var(--column-min-width)), 1fr));
+  gap: var(--space-8);
+  align-items: center;
   padding: var(--space-8);
+  transition: border-color var(--transition-fast);
+}
+
+.project-card:hover,
+.project-card:has(.project-card__link:focus-visible) {
+  border-color: var(--color-accent);
+}
+
+.project-card__cover img {
+  display: block;
+  width: 100%;
+  height: auto;
+  border-radius: var(--radius-sm);
+}
+
+.project-card__body {
+  display: grid;
+  gap: var(--space-3);
 }
 
 .project-card__title {
   font-size: var(--font-size-xl);
 }
 
-.project-card__summary {
-  color: var(--color-text-muted);
+.project-card__link {
+  color: var(--color-text);
+  text-decoration: none;
+}
+
+.project-card__link::after {
+  content: "";
+  position: absolute;
+  inset: 0;
+}
+
+.project-card__link:focus-visible {
+  outline: none;
+}
+
+.project-card__actions {
+  position: relative;
+  z-index: 1;
+  margin-top: var(--space-2);
+}
+
+.page__cover img {
+  display: block;
+  width: 100%;
+  height: auto;
+  border-radius: var(--radius-md);
+}
+
+.screenshot-list {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(min(100%, var(--screenshot-width)), 1fr));
+  gap: var(--space-6);
+}
+
+.screenshot-list img {
+  display: block;
+  width: 100%;
+  height: auto;
+  border: var(--border-width) solid var(--color-border);
+  border-radius: var(--radius-md);
+}
+
+.devlog-list {
+  display: grid;
+  gap: var(--space-8);
+}
+
+.devlog-item {
+  display: grid;
+  gap: var(--space-2);
+}
+
+.devlog-item__title {
+  font-size: var(--font-size-lg);
+}
+
+.certification-list {
+  display: grid;
+  gap: var(--space-4);
+  margin-top: var(--space-4);
+}
+
+.certification {
+  display: grid;
+  gap: var(--space-1);
 }
 
 .certification__name {
@@ -236,7 +435,7 @@ a:hover {
 
 .site-footer__inner {
   display: grid;
-  gap: var(--space-2);
+  gap: var(--space-4);
   padding-block: var(--space-12);
 }
 

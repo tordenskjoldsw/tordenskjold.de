@@ -37,6 +37,7 @@
   --content-width: 70rem;
   --text-width: 40rem;
   --column-min-width: 18rem;
+  --screenshot-width: 14rem;
   --gutter: var(--space-4);
 
   /* Shape */

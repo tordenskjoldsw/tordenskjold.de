@@ -4,8 +4,9 @@
     <nav aria-label="Main">
       <ul class="site-nav">
         <li><a href="/#projects">Projects</a></li>
-        <li><a href="/#engineering">Engineering</a></li>
-        <li><a href="/#certifications">Certifications</a></li>
+        {% if has_devlog %}
+        <li><a href="/devlog">Devlog</a></li>
+        {% endif %}
         <li><a href="/#about">About</a></li>
         <li><a href="{{ github_profile_url }}">GitHub</a></li>
       </ul>

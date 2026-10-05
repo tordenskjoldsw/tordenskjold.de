@@ -1,0 +1,21 @@
+{% extends "base.html" %}
+{% from "partials/macros.html" import devlog_list %}
+
+{% block title %}Devlog - Tobias Kaminski{% endblock %}
+{% block description %}Release notes and development notes on the open-source projects of Tobias Kaminski.{% endblock %}
+
+{% block content %}
+<div class="container page">
+  <header class="page__header">
+    <h1 class="page__title">Devlog</h1>
+    {% if entries %}
+    <p><a href="/feed.xml">Subscribe via Atom feed</a></p>
+    {% endif %}
+  </header>
+  {% if entries %}
+  {{ devlog_list(entries, heading_level=2) }}
+  {% else %}
+  <p class="muted">No entries yet.</p>
+  {% endif %}
+</div>
+{% endblock %}

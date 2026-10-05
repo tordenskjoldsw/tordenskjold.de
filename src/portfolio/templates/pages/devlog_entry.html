@@ -1,0 +1,23 @@
+{% extends "base.html" %}
+
+{% block title %}{{ entry.title }} - Devlog - Tobias Kaminski{% endblock %}
+{% block description %}{{ entry.summary }}{% endblock %}
+
+{% block content %}
+<article class="container page">
+  <p><a href="/devlog">All devlog entries</a></p>
+
+  <header class="page__header">
+    <p class="meta">
+      <time datetime="{{ entry.date.isoformat() }}">{{ entry.date.isoformat() }}</time>
+      {% if project %} · <a href="/projects/{{ project.slug }}">{{ project.title }}</a>{% endif %}
+    </p>
+    <h1 class="page__title">{{ entry.title }}</h1>
+    <p class="page__lead">{{ entry.summary }}</p>
+  </header>
+
+  <div class="prose">
+    {{ entry.body_html | safe }}
+  </div>
+</article>
+{% endblock %}
