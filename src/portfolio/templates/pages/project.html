@@ -41,6 +41,17 @@
         <dt>License</dt>
         <dd>{{ project.license }}</dd>
         {% endif %}
+        {% if stats and stats.latest_release %}
+        <dt>Latest release</dt>
+        <dd>
+          <a href="{{ stats.latest_release.html_url }}">{{ stats.latest_release.tag_name }}</a>
+          <span class="muted">({{ stats.latest_release.published_at.date().isoformat() }})</span>
+        </dd>
+        {% endif %}
+        {% if stats %}
+        <dt>Last push</dt>
+        <dd>{{ stats.last_push.isoformat() }}</dd>
+        {% endif %}
       </dl>
       {{ project_links(project) }}
     </aside>

@@ -15,7 +15,10 @@
 {% endif %}
 {% endmacro %}
 
-{% macro project_meta(project) %}
+{% macro project_meta(project, stats=none) %}
+{% if stats and stats.latest_release %}
+<p class="meta">Latest release: {{ stats.latest_release.tag_name }}</p>
+{% endif %}
 {% if project.tags %}
 <p class="meta">{{ project.tags | join(" · ") }}</p>
 {% endif %}
@@ -24,7 +27,7 @@
 {% endif %}
 {% endmacro %}
 
-{% macro project_card(project, eager=false) %}
+{% macro project_card(project, stats=none, eager=false) %}
 <article class="card project-card">
   <div class="project-card__cover">
     {% if project.cover %}
@@ -40,7 +43,7 @@
       <a class="project-card__link" href="/projects/{{ project.slug }}">{{ project.title }}</a>
     </h3>
     <p class="muted">{{ project.summary }}</p>
-    {{ project_meta(project) }}
+    {{ project_meta(project, stats) }}
     <div class="project-card__actions">
       {# Visual cue only: the title link already names the target for screen readers. #}
       <span class="project-card__cue" aria-hidden="true">View project</span>

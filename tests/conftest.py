@@ -15,7 +15,10 @@ TEST_HOST = "testserver"
 
 @pytest.fixture
 def settings() -> Settings:
-    return Settings(environment="development", allowed_hosts=[TEST_HOST])
+    # Tests never touch the network; GitHub tests use a mocked transport.
+    return Settings(
+        environment="development", allowed_hosts=[TEST_HOST], github_enabled=False
+    )
 
 
 @pytest.fixture

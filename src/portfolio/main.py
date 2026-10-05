@@ -1,16 +1,18 @@
 import asyncio
 import logging
 from collections.abc import AsyncIterator
-from contextlib import asynccontextmanager
+from contextlib import asynccontextmanager, suppress
 
 from fastapi import FastAPI
 from fastapi.middleware.trustedhost import TrustedHostMiddleware
 
 from portfolio.config import Settings, get_settings
 from portfolio.middleware import SecurityHeadersMiddleware
+from portfolio.models import Project
 from portfolio.routes import devlog, meta, pages
 from portfolio.routes.errors import register_error_handlers
 from portfolio.services.content import load_content
+from portfolio.services.github import RepoStatsCache, create_client, refresh_forever
 from portfolio.static_files import STATIC_URL_PREFIX, CachedStaticFiles
 from portfolio.templating import STATIC_DIR
 
@@ -33,7 +35,12 @@ def create_app(settings: Settings | None = None) -> FastAPI:
             len(content.certifications),
         )
         app.state.content = content
-        yield
+        app.state.repo_stats = RepoStatsCache()
+        if not settings.github_enabled:
+            yield
+            return
+        async with github_refresh(settings, app.state.repo_stats, content.projects):
+            yield
 
     app = FastAPI(
         title="Portfolio",
@@ -52,6 +59,26 @@ def create_app(settings: Settings | None = None) -> FastAPI:
     app.include_router(pages.router)
     app.include_router(devlog.router)
     return app
+
+
+@asynccontextmanager
+async def github_refresh(
+    settings: Settings, cache: RepoStatsCache, projects: tuple[Project, ...]
+) -> AsyncIterator[None]:
+    # Runs in the background so a slow or unreachable GitHub never delays
+    # startup or a request.
+    async with create_client(
+        settings.github_token, settings.github_timeout_seconds
+    ) as client:
+        task = asyncio.create_task(
+            refresh_forever(cache, client, projects, settings.github_refresh_seconds)
+        )
+        try:
+            yield
+        finally:
+            task.cancel()
+            with suppress(asyncio.CancelledError):
+                await task
 
 
 app = create_app()

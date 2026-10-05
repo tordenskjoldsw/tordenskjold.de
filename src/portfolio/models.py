@@ -66,3 +66,23 @@ class SiteContent(ContentModel):
 
     def devlog_for(self, project: Project) -> tuple[DevlogEntry, ...]:
         return tuple(e for e in self.devlog if e.project == project.slug)
+
+
+class GitHubModel(BaseModel):
+    # GitHub responses carry far more fields than the site uses.
+    model_config = ConfigDict(frozen=True, extra="ignore")
+
+
+class GitHubRepo(GitHubModel):
+    pushed_at: datetime.datetime
+
+
+class GitHubRelease(GitHubModel):
+    tag_name: str
+    html_url: HttpUrl
+    published_at: datetime.datetime
+
+
+class RepoStats(GitHubModel):
+    last_push: datetime.date
+    latest_release: GitHubRelease | None
