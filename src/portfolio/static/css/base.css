@@ -1,3 +1,6 @@
+/* Font URLs carry no content hash, so a new font version needs a new file
+   name; otherwise browsers keep the cached file for up to a year. */
+
 @font-face {
   font-family: "Inter";
   font-style: normal;

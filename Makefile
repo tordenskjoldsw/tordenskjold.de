@@ -7,8 +7,11 @@ install:
 	uv sync
 	uv run pre-commit install
 
+# Content and static file hashes are read at startup, so changes to them
+# need a restart as well.
 dev:
-	uv run uvicorn portfolio.main:app --reload
+	uv run uvicorn portfolio.main:app --reload \
+		--reload-include '*.css' --reload-include '*.md' --reload-include '*.yaml'
 
 format:
 	uv run ruff format .
