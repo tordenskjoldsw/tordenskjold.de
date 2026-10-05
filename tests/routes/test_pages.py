@@ -14,6 +14,12 @@ def test_home_renders_content(client: TestClient) -> None:
     assert "4A0-100" in response.text
 
 
+def test_home_links_github_profile(client: TestClient) -> None:
+    response = client.get("/")
+
+    assert 'href="https://github.com/tordenskjoldsw"' in response.text
+
+
 def test_home_has_single_h1(client: TestClient) -> None:
     response = client.get("/")
 

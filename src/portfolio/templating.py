@@ -5,6 +5,7 @@ from fastapi.templating import Jinja2Templates
 PACKAGE_DIR = Path(__file__).resolve().parent
 STATIC_DIR = PACKAGE_DIR / "static"
 STATIC_URL_PREFIX = "/static"
+GITHUB_PROFILE_URL = "https://github.com/tordenskjoldsw"
 
 templates = Jinja2Templates(directory=PACKAGE_DIR / "templates")
 
@@ -16,3 +17,4 @@ def static_url(path: str) -> str:
 
 
 templates.env.globals["static_url"] = static_url
+templates.env.globals["github_profile_url"] = GITHUB_PROFILE_URL
