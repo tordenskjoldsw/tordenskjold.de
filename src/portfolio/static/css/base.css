@@ -177,6 +177,8 @@ a:hover {
 }
 
 .prose :is(ul, ol) {
+  max-width: var(--text-width);
+  margin: 0;
   padding-left: var(--space-6);
   list-style: revert;
 }
