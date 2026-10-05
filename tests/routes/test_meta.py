@@ -35,6 +35,7 @@ def test_sitemap_lists_pages(sample_client: TestClient) -> None:
     locations = [loc.text for loc in sitemap.iter(f"{SITEMAP}loc")]
     assert locations == [
         "https://example.com/",
+        "https://example.com/projects",
         "https://example.com/projects/alpha",
         "https://example.com/devlog",
         "https://example.com/devlog/newer",

@@ -12,7 +12,7 @@ def test_sitemap_omits_devlog_without_entries(sample_content_dir: Path) -> None:
 
     paths = [entry.path for entry in sitemap_entries(content)]
 
-    assert paths == ["/", "/projects/alpha"]
+    assert paths == ["/", "/projects", "/projects/alpha"]
 
 
 def test_sitemap_dates_devlog_entries(sample_content_dir: Path) -> None:

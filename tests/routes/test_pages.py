@@ -1,6 +1,12 @@
 import re
+from pathlib import Path
 
 from fastapi.testclient import TestClient
+
+from portfolio.config import Settings
+from portfolio.main import create_app
+from portfolio.routes.pages import HOME_PROJECT_LIMIT
+from tests.content_helpers import write_entry
 
 
 def test_home_renders_content(client: TestClient) -> None:
@@ -110,3 +116,38 @@ def test_stylesheet_is_served(client: TestClient) -> None:
 
     assert response.status_code == 200
     assert response.headers["content-type"].startswith("text/css")
+
+
+def test_projects_page_lists_all_projects(client: TestClient) -> None:
+    response = client.get("/projects")
+
+    assert response.status_code == 200
+    assert response.text.count("<h1") == 1
+    assert 'href="/projects/sailvault"' in response.text
+    assert 'href="/projects/pineforge"' in response.text
+
+
+def test_home_hides_all_projects_link_when_all_fit(client: TestClient) -> None:
+    html = client.get("/").text
+
+    assert 'href="/projects">All projects</a>' not in html
+
+
+def test_home_limits_projects_and_links_the_rest(
+    settings: Settings, sample_content_dir: Path
+) -> None:
+    for number in range(HOME_PROJECT_LIMIT):
+        write_entry(
+            sample_content_dir / "projects",
+            f"extra-{number}",
+            f"title: Extra {number}\nsummary: S\nplatform: P\norder: {number + 2}",
+        )
+    app = create_app(settings.model_copy(update={"content_dir": sample_content_dir}))
+
+    with TestClient(app) as client:
+        home = client.get("/").text
+        overview = client.get("/projects").text
+
+    assert home.count('class="project-item"') == HOME_PROJECT_LIMIT
+    assert 'href="/projects">All projects</a>' in home
+    assert overview.count('class="project-item"') == HOME_PROJECT_LIMIT + 1

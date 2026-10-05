@@ -55,7 +55,12 @@
   <hr class="divider">
 
   <section class="home-section" id="projects" aria-labelledby="projects-title">
-    <h2 class="section__title" id="projects-title">Projects</h2>
+    <div class="section__header">
+      <h2 class="section__title" id="projects-title">Projects</h2>
+      {% if has_more_projects %}
+      <a href="/projects">All projects</a>
+      {% endif %}
+    </div>
     <ul class="project-list">
       {% for project in projects %}
       {{ project_item(project, repo_stats.get(project.slug)) }}

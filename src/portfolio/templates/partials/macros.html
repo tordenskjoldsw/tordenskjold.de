@@ -28,13 +28,13 @@
 {% endif %}
 {% endmacro %}
 
-{% macro project_item(project, stats=none) %}
+{% macro project_item(project, stats=none, heading_level=3) %}
 <li class="project-item">
   <span class="project-item__icon">{{ project_icon(project) }}</span>
   <div class="project-item__body">
-    <h3 class="project-item__title">
+    <h{{ heading_level }} class="project-item__title">
       <a class="project-item__link" href="/projects/{{ project.slug }}">{{ project.title }}</a>
-    </h3>
+    </h{{ heading_level }}>
     <p class="muted">{{ project.summary }}</p>
     <p class="meta">
       {{ project.platform }}{% for tag in project.tags %} · {{ tag }}{% endfor %}
