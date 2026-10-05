@@ -8,6 +8,7 @@ from fastapi.middleware.trustedhost import TrustedHostMiddleware
 from fastapi.staticfiles import StaticFiles
 
 from portfolio.config import Settings, get_settings
+from portfolio.middleware import SecurityHeadersMiddleware
 from portfolio.routes import devlog, meta, pages
 from portfolio.routes.errors import register_error_handlers
 from portfolio.services.content import load_content
@@ -43,6 +44,8 @@ def create_app(settings: Settings | None = None) -> FastAPI:
     )
     app.state.settings = settings
     app.add_middleware(TrustedHostMiddleware, allowed_hosts=settings.allowed_hosts)
+    # Added last so it wraps everything, including host rejections.
+    app.add_middleware(SecurityHeadersMiddleware)
     app.mount(STATIC_URL_PREFIX, StaticFiles(directory=STATIC_DIR), name="static")
     register_error_handlers(app)
     app.include_router(meta.router)
