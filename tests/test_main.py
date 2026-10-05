@@ -1,8 +1,11 @@
+from pathlib import Path
+
 import pytest
 from fastapi.testclient import TestClient
 
 from portfolio.config import Settings
 from portfolio.main import create_app
+from portfolio.services.content import ContentError
 
 DOCS_PATHS = ["/docs", "/redoc", "/openapi.json"]
 
@@ -24,3 +27,10 @@ def test_docs_disabled_in_production(settings: Settings, path: str) -> None:
 @pytest.mark.parametrize("path", DOCS_PATHS)
 def test_docs_enabled_in_development(client: TestClient, path: str) -> None:
     assert client.get(path).status_code == 200
+
+
+def test_invalid_content_fails_startup(settings: Settings, tmp_path: Path) -> None:
+    broken = settings.model_copy(update={"content_dir": tmp_path})
+
+    with pytest.raises(ContentError), TestClient(create_app(broken)):
+        pass

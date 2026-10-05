@@ -1,0 +1,19 @@
+{% macro section_heading(number, title, id) %}
+<h2 class="section-heading" id="{{ id }}">
+  <span class="section-heading__number">{{ number }}</span>
+  {{ title }}
+</h2>
+{% endmacro %}
+
+{% macro project_card(project) %}
+<article class="card project-card">
+  <h3 class="project-card__title">{{ project.title }}</h3>
+  <p class="project-card__summary">{{ project.summary }}</p>
+  {% if project.license %}
+  <p class="meta">{{ project.license }}</p>
+  {% endif %}
+  {% if project.repository %}
+  <p><a href="{{ project.repository }}">Repository</a></p>
+  {% endif %}
+</article>
+{% endmacro %}

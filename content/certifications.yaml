@@ -1,0 +1,6 @@
+# Only certifications that have been earned are listed.
+
+# TODO(content): credential_url for Nokia NRS I
+- name: Nokia NRS I
+  exam_code: 4A0-100
+  issuer: Nokia

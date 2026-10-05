@@ -1,0 +1,58 @@
+{% extends "base.html" %}
+{% from "partials/macros.html" import section_heading, project_card %}
+
+{% block title %}Tobias Kaminski - Networking & Open Source{% endblock %}
+{% block description %}Tobias Kaminski: networking and private open-source projects such as SailVault and PineForge.{% endblock %}
+
+{% block content %}
+<section class="hero container" aria-labelledby="hero-title">
+  <h1 class="hero__title" id="hero-title">Tobias Kaminski</h1>
+  <p class="hero__intro">TODO(content): introduction sentence</p>
+  <a class="button" href="#projects">View projects</a>
+</section>
+
+<section class="section container" id="projects" aria-labelledby="projects-title">
+  {{ section_heading("01", "Projects", "projects-title") }}
+  <div class="project-list">
+    {% for project in projects %}
+    {{ project_card(project) }}
+    {% endfor %}
+  </div>
+</section>
+
+<section class="section container" id="engineering" aria-labelledby="engineering-title">
+  {{ section_heading("02", "Engineering", "engineering-title") }}
+  <div class="columns">
+    <article class="card">
+      <h3>Networking</h3>
+      <p>TODO(content): networking focus</p>
+      <p><a href="#certifications">Certifications</a></p>
+    </article>
+    <article class="card">
+      <h3>Software</h3>
+      <p>TODO(content): software focus</p>
+      <p><a href="#projects">Projects</a></p>
+    </article>
+  </div>
+</section>
+
+<section class="section container" id="certifications" aria-labelledby="certifications-title">
+  {{ section_heading("03", "Certifications", "certifications-title") }}
+  <ul class="certification-list">
+    {% for certification in certifications %}
+    <li class="card certification">
+      <span class="certification__name">{{ certification.name }}</span>
+      <span class="meta">{{ certification.exam_code }} · {{ certification.issuer }}</span>
+      {% if certification.credential_url %}
+      <a href="{{ certification.credential_url }}">Verify credential</a>
+      {% endif %}
+    </li>
+    {% endfor %}
+  </ul>
+</section>
+
+<section class="section container" id="about" aria-labelledby="about-title">
+  {{ section_heading("04", "About", "about-title") }}
+  <p>TODO(content): about text</p>
+</section>
+{% endblock %}
