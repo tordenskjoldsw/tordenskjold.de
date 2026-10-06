@@ -20,3 +20,6 @@ htmlcov/
 
 # Real legal texts contain the postal address; only legal.example/ is tracked
 /legal/
+
+# Local instructions for Claude Code, never published
+CLAUDE.md
