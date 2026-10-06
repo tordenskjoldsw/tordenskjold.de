@@ -1,0 +1,53 @@
+[Unit]
+Description=tordenskjold.de website
+Wants=network-online.target
+After=network-online.target
+
+[Service]
+Type=exec
+User=portfolio
+Group=portfolio
+WorkingDirectory=/srv/portfolio/app
+EnvironmentFile=/etc/portfolio/portfolio.env
+# The code directory is read-only for the service.
+Environment=PYTHONDONTWRITEBYTECODE=1
+# No access log: the privacy policy promises that page views are not
+# recorded. Proxy headers are trusted only from nginx on the same host.
+ExecStart=/srv/portfolio/app/.venv/bin/uvicorn portfolio.main:app \
+    --host 127.0.0.1 --port 8000 \
+    --proxy-headers --forwarded-allow-ips 127.0.0.1 \
+    --no-access-log --no-server-header
+Restart=on-failure
+RestartSec=5
+
+# Sandboxing. The app only reads its code, content and legal texts and
+# talks to nginx and the GitHub API.
+UMask=0077
+NoNewPrivileges=yes
+CapabilityBoundingSet=
+ProtectSystem=strict
+ProtectHome=yes
+PrivateTmp=yes
+PrivateDevices=yes
+ProtectKernelTunables=yes
+ProtectKernelModules=yes
+ProtectKernelLogs=yes
+ProtectControlGroups=yes
+ProtectClock=yes
+ProtectHostname=yes
+ProtectProc=invisible
+ProcSubset=pid
+RestrictAddressFamilies=AF_INET AF_INET6 AF_UNIX
+RestrictNamespaces=yes
+RestrictRealtime=yes
+RestrictSUIDSGID=yes
+RemoveIPC=yes
+LockPersonality=yes
+MemoryDenyWriteExecute=yes
+SystemCallArchitectures=native
+SystemCallFilter=@system-service
+SystemCallFilter=~@privileged
+SystemCallErrorNumber=EPERM
+
+[Install]
+WantedBy=multi-user.target
