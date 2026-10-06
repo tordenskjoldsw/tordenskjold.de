@@ -12,8 +12,8 @@ def test_devlog_index_lists_entries_newest_first(sample_client: TestClient) -> N
     assert response.text.index("Newer entry") < response.text.index("Older entry")
 
 
-def test_devlog_index_without_entries(client: TestClient) -> None:
-    response = client.get("/devlog")
+def test_devlog_index_without_entries(no_devlog_client: TestClient) -> None:
+    response = no_devlog_client.get("/devlog")
 
     assert response.status_code == 200
     assert "No entries yet." in response.text
@@ -46,5 +46,5 @@ def test_feed_is_valid_atom(sample_client: TestClient) -> None:
     ]
 
 
-def test_feed_returns_404_without_entries(client: TestClient) -> None:
-    assert client.get("/feed.xml").status_code == 404
+def test_feed_returns_404_without_entries(no_devlog_client: TestClient) -> None:
+    assert no_devlog_client.get("/feed.xml").status_code == 404

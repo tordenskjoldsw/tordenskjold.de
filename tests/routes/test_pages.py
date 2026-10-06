@@ -75,8 +75,8 @@ def test_home_sections_in_order(sample_client: TestClient) -> None:
     assert positions == sorted(positions)
 
 
-def test_home_hides_devlog_without_entries(client: TestClient) -> None:
-    html = client.get("/").text
+def test_home_hides_devlog_without_entries(no_devlog_client: TestClient) -> None:
+    html = no_devlog_client.get("/").text
 
     assert 'id="devlog"' not in html
     assert 'href="/devlog"' not in html

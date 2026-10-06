@@ -28,8 +28,23 @@ def client(settings: Settings) -> Iterator[TestClient]:
 
 
 @pytest.fixture
+def no_devlog_client(settings: Settings, tmp_path: Path) -> Iterator[TestClient]:
+    """The site before its first devlog entry."""
+    write_entry(
+        tmp_path / "projects",
+        "alpha",
+        "title: Alpha\nsummary: First project\nplatform: Example OS\norder: 1",
+    )
+    (tmp_path / "devlog").mkdir()
+    (tmp_path / "certifications.yaml").write_text(SAMPLE_CERTIFICATIONS)
+    no_devlog = settings.model_copy(update={"content_dir": tmp_path})
+    with TestClient(create_app(no_devlog)) as test_client:
+        yield test_client
+
+
+@pytest.fixture
 def sample_content_dir(tmp_path: Path) -> Path:
-    """Content with devlog entries, which the repository does not have yet."""
+    """Small, stable content with devlog entries, independent of the real one."""
     write_entry(
         tmp_path / "projects",
         "alpha",
