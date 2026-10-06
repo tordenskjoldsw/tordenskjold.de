@@ -10,6 +10,7 @@ from portfolio.static_files import StaticUrls, build_static_versions
 PACKAGE_DIR = Path(__file__).resolve().parent
 STATIC_DIR = PACKAGE_DIR / "static"
 GITHUB_PROFILE_URL = "https://github.com/tordenskjoldsw"
+SOURCE_URL = "https://github.com/tordenskjoldsw/tordenskjold.de"
 
 
 # base.html needs these on every page: navigation and footer link the
@@ -31,3 +32,4 @@ templates = Jinja2Templates(
 # URLs that depend on the scheme and host seen behind the reverse proxy.
 templates.env.globals["static_url"] = StaticUrls(build_static_versions(STATIC_DIR))
 templates.env.globals["github_profile_url"] = GITHUB_PROFILE_URL
+templates.env.globals["source_url"] = SOURCE_URL

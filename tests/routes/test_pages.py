@@ -6,6 +6,7 @@ from fastapi.testclient import TestClient
 from portfolio.config import Settings
 from portfolio.main import create_app
 from portfolio.routes.pages import HOME_PROJECT_LIMIT
+from portfolio.templating import SOURCE_URL
 from tests.content_helpers import write_entry
 
 
@@ -17,6 +18,12 @@ def test_home_renders_content(client: TestClient) -> None:
     assert "PineForge" in response.text
     assert "4A0-100" in response.text
     assert 'href="https://www.credly.com/badges/' in response.text
+
+
+def test_footer_links_source_code(client: TestClient) -> None:
+    html = client.get("/").text
+
+    assert f'href="{SOURCE_URL}">Source of this site</a>' in html
 
 
 def test_project_list_shows_platform_and_tech(client: TestClient) -> None:
