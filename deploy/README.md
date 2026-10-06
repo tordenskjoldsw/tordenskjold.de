@@ -17,7 +17,7 @@ the server.
 | `/srv/portfolio/app` | checkout of this repository | admin user |
 | `/srv/portfolio/python` | Python installed by uv | admin user |
 | `/etc/portfolio/portfolio.env` | settings, from `portfolio.env.example` | root, `0600` |
-| `/etc/portfolio/legal/` | `imprint.md`, `privacy.md` | root:portfolio, `0750`/`0640` |
+| `/etc/portfolio/legal/` | `imprint.md`, `privacy.md` and their `.en.md` versions | root:portfolio, `0750`/`0640` |
 
 The app runs as the system user `portfolio`, which can read but not write
 any of these.
@@ -42,14 +42,16 @@ sudo useradd --system --user-group --no-create-home --shell /usr/sbin/nologin po
 UV_PYTHON_INSTALL_DIR=/srv/portfolio/python uv sync --frozen --no-dev --compile-bytecode
 ```
 
-Settings and legal texts (copy `imprint.md` and `privacy.md` to the home
-directory first, for example with `scp`):
+Settings and legal texts (copy `imprint.md`, `imprint.en.md`, `privacy.md`
+and `privacy.en.md` to the home directory first, for example with `scp`;
+the app does not start if one is missing):
 
 ```sh
 sudo install -d -m 755 /etc/portfolio
 sudo install -m 600 deploy/portfolio.env.example /etc/portfolio/portfolio.env
 sudo install -d -o root -g portfolio -m 750 /etc/portfolio/legal
-sudo install -o root -g portfolio -m 640 ~/imprint.md ~/privacy.md /etc/portfolio/legal/
+sudo install -o root -g portfolio -m 640 ~/imprint.md ~/imprint.en.md \
+    ~/privacy.md ~/privacy.en.md /etc/portfolio/legal/
 ```
 
 Service:

@@ -149,6 +149,24 @@ img {
   font-size: var(--font-size-lg);
 }
 
+/* "Deutsch  English" below the title of the legal pages. */
+.language-switch ul {
+  display: flex;
+  gap: var(--space-4);
+  font-family: var(--font-mono);
+  font-size: var(--font-size-sm);
+  letter-spacing: var(--letter-spacing-label);
+}
+
+.language-switch a {
+  color: var(--color-text-muted);
+}
+
+.language-switch a[aria-current="page"] {
+  color: var(--color-text-strong);
+  text-decoration-color: var(--color-accent);
+}
+
 .page__section {
   display: grid;
   gap: var(--space-6);

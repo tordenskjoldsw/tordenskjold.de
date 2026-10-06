@@ -3,7 +3,7 @@ from typing import Annotated
 from fastapi import APIRouter, Depends, HTTPException, Request
 from fastapi.responses import HTMLResponse
 
-from portfolio.models import LegalTexts, SiteContent
+from portfolio.models import LegalLanguage, LegalTexts, SiteContent
 from portfolio.services.content import get_legal_texts, get_site_content
 from portfolio.services.github import RepoStatsCache, get_repo_stats
 from portfolio.templating import templates
@@ -11,6 +11,18 @@ from portfolio.templating import templates
 LATEST_DEVLOG_COUNT = 3
 # Keeps the home page short as projects are added; /projects lists all.
 HOME_PROJECT_LIMIT = 4
+
+# The German legal texts are the binding ones and keep the original URLs;
+# the English versions add a suffix. Maps language to (suffix, label).
+LEGAL_VERSIONS: dict[LegalLanguage, tuple[str, str]] = {
+    "de": ("", "Deutsch"),
+    "en": ("/en", "English"),
+}
+IMPRINT_TITLES: dict[LegalLanguage, str] = {"de": "Impressum", "en": "Imprint"}
+PRIVACY_TITLES: dict[LegalLanguage, str] = {
+    "de": "Datenschutzerklärung",
+    "en": "Privacy Policy",
+}
 
 router = APIRouter(include_in_schema=False)
 Content = Annotated[SiteContent, Depends(get_site_content)]
@@ -68,17 +80,42 @@ async def project_detail(
 
 @router.api_route("/imprint", methods=["GET", "HEAD"], response_class=HTMLResponse)
 async def imprint(request: Request, legal: Legal) -> HTMLResponse:
-    return templates.TemplateResponse(
-        request,
-        "pages/legal.html",
-        {"title": "Impressum", "body_html": legal.imprint_html},
-    )
+    return _legal_page(request, "/imprint", IMPRINT_TITLES, legal.imprint, "de")
+
+
+@router.api_route("/imprint/en", methods=["GET", "HEAD"], response_class=HTMLResponse)
+async def imprint_english(request: Request, legal: Legal) -> HTMLResponse:
+    return _legal_page(request, "/imprint", IMPRINT_TITLES, legal.imprint, "en")
 
 
 @router.api_route("/privacy", methods=["GET", "HEAD"], response_class=HTMLResponse)
 async def privacy(request: Request, legal: Legal) -> HTMLResponse:
+    return _legal_page(request, "/privacy", PRIVACY_TITLES, legal.privacy, "de")
+
+
+@router.api_route("/privacy/en", methods=["GET", "HEAD"], response_class=HTMLResponse)
+async def privacy_english(request: Request, legal: Legal) -> HTMLResponse:
+    return _legal_page(request, "/privacy", PRIVACY_TITLES, legal.privacy, "en")
+
+
+def _legal_page(
+    request: Request,
+    path: str,
+    titles: dict[LegalLanguage, str],
+    texts: dict[LegalLanguage, str],
+    language: LegalLanguage,
+) -> HTMLResponse:
+    versions = [
+        {"language": code, "label": label, "href": path + suffix}
+        for code, (suffix, label) in LEGAL_VERSIONS.items()
+    ]
     return templates.TemplateResponse(
         request,
         "pages/legal.html",
-        {"title": "Datenschutzerklärung", "body_html": legal.privacy_html},
+        {
+            "title": titles[language],
+            "language": language,
+            "body_html": texts[language],
+            "versions": versions,
+        },
     )

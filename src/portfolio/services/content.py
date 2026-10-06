@@ -9,6 +9,7 @@ from pydantic import BaseModel, TypeAdapter, ValidationError
 from portfolio.models import (
     Certification,
     DevlogEntry,
+    LegalLanguage,
     LegalTexts,
     Project,
     SiteContent,
@@ -68,8 +69,8 @@ def load_certifications(path: Path) -> tuple[Certification, ...]:
 
 def load_legal(legal_dir: Path) -> LegalTexts:
     return LegalTexts(
-        imprint_html=_load_legal_page(legal_dir / "imprint.md"),
-        privacy_html=_load_legal_page(legal_dir / "privacy.md"),
+        imprint=_load_legal_versions(legal_dir, "imprint"),
+        privacy=_load_legal_versions(legal_dir, "privacy"),
     )
 
 
@@ -107,6 +108,13 @@ def _load_entry[EntryT: BaseModel](path: Path, model: type[EntryT]) -> EntryT:
         return model.model_validate(data)
     except ValidationError as exc:
         raise ContentError(f"{path}: invalid front matter\n{exc}") from exc
+
+
+def _load_legal_versions(legal_dir: Path, name: str) -> dict[LegalLanguage, str]:
+    return {
+        "de": _load_legal_page(legal_dir / f"{name}.md"),
+        "en": _load_legal_page(legal_dir / f"{name}.en.md"),
+    }
 
 
 def _load_legal_page(path: Path) -> str:

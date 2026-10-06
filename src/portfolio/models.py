@@ -1,4 +1,5 @@
 import datetime
+from typing import Literal
 
 from pydantic import BaseModel, ConfigDict, Field, HttpUrl, PositiveInt
 
@@ -50,9 +51,14 @@ class Certification(ContentModel):
     credential_url: HttpUrl | None = None
 
 
+LegalLanguage = Literal["de", "en"]
+
+
 class LegalTexts(ContentModel):
-    imprint_html: str
-    privacy_html: str
+    """Rendered legal pages; the German versions are the binding ones."""
+
+    imprint: dict[LegalLanguage, str]
+    privacy: dict[LegalLanguage, str]
 
 
 class SitemapEntry(ContentModel):

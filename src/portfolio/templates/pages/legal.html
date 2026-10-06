@@ -9,9 +9,17 @@
 {% endblock %}
 
 {% block content %}
-<article class="column page" lang="de">
+<article class="column page" lang="{{ language }}">
   <header class="page__header">
     <h1 class="page__title">{{ title }}</h1>
+    {# Part of the English site chrome, whatever the text's language. #}
+    <nav class="language-switch" aria-label="Language" lang="en">
+      <ul>
+        {% for version in versions %}
+        <li><a href="{{ version.href }}" hreflang="{{ version.language }}" lang="{{ version.language }}"{% if version.language == language %} aria-current="page"{% endif %}>{{ version.label }}</a></li>
+        {% endfor %}
+      </ul>
+    </nav>
   </header>
   <div class="prose">
     {{ body_html | safe }}
