@@ -43,10 +43,16 @@ def test_home_links_project_detail_pages(client: TestClient) -> None:
 def test_project_icons_are_decorative(client: TestClient) -> None:
     html = client.get("/").text
 
-    assert re.search(
-        r'<img src="/static/img/projects/sailvault/icon\.svg\?v=\w+" alt=""', html
-    )
-    assert '<span class="monogram" aria-hidden="true">P</span>' in html
+    for slug in ("sailvault", "pineforge"):
+        assert re.search(
+            rf'<img src="/static/img/projects/{slug}/icon\.svg\?v=\w+" alt=""', html
+        )
+
+
+def test_project_without_icon_shows_monogram(sample_client: TestClient) -> None:
+    html = sample_client.get("/").text
+
+    assert '<span class="monogram" aria-hidden="true">A</span>' in html
 
 
 def test_home_links_github_profile(client: TestClient) -> None:
