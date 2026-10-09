@@ -2,11 +2,11 @@
 title: A separate app for the second factor
 summary: Why my second Sailfish OS app is an authenticator, and why it stores its codes in a KeePass file.
 date: 2026-10-07
-project: sailfactor
+project: sailtoken
 ---
 
 In my first post I wrote that I would not stop at one app. Here is the
-second one: [SailFactor](/projects/sailfactor), an authenticator for the
+second one: [SailToken](/projects/sailtoken), an authenticator for the
 time-based codes (TOTP) that many services ask for after the password.
 
 ## Why a second app
@@ -42,7 +42,7 @@ with any storage format.
 
 ## Building it
 
-SailFactor reuses the KeePass code from SailVault, which has been tested
+SailToken reuses the KeePass code from SailVault, which has been tested
 on the Jolla Phone and reviewed twice. The two apps stay independent: the
 code is copied, not shared, and a fix in one is carried over to the other.
 
@@ -55,5 +55,5 @@ far.
 Next is the camera. Scanning a QR code is the one part SailVault taught
 me nothing about, so it comes first, before any code is generated. The
 source is public from the first commit, and the
-[plan](https://github.com/tordenskjoldsw/harbour-sailfactor/blob/main/PLAN.md)
+[plan](https://github.com/tordenskjoldsw/harbour-sailtoken/blob/main/PLAN.md)
 is in the repository if you want to follow along.

@@ -1,34 +1,34 @@
 ---
-title: SailFactor
+title: SailToken
 summary: TOTP authenticator for Sailfish OS, apart from the password manager
 platform: Sailfish OS
 order: 3
 tags: [Rust, C++, Qt, QML]
 license: MIT
-repository: https://github.com/tordenskjoldsw/harbour-sailfactor
-icon: img/projects/sailfactor/icon.svg
+repository: https://github.com/tordenskjoldsw/harbour-sailtoken
+icon: img/projects/sailtoken/icon.svg
 cover:
-  path: img/projects/sailfactor/cover.png
-  alt: "SailFactor: authenticator for Sailfish OS"
+  path: img/projects/sailtoken/cover.png
+  alt: "SailToken: authenticator for Sailfish OS"
   width: 1080
   height: 540
 # The screenshots show a demo file with made-up accounts.
 screenshots:
-  - path: img/projects/sailfactor/screenshot-1-accounts.jpg
+  - path: img/projects/sailtoken/screenshot-1-accounts.jpg
     alt: Account list with codes and countdown rings
     width: 480
     height: 1057
-  - path: img/projects/sailfactor/screenshot-2-add.jpg
+  - path: img/projects/sailtoken/screenshot-2-add.jpg
     alt: Typing in an account
     width: 480
     height: 1057
-  - path: img/projects/sailfactor/screenshot-3-settings.jpg
+  - path: img/projects/sailtoken/screenshot-3-settings.jpg
     alt: Settings with sync, merging and the file
     width: 480
     height: 1057
 ---
 
-SailFactor is an authenticator for the time-based codes (TOTP) that many
+SailToken is an authenticator for the time-based codes (TOTP) that many
 services ask for after the password. It keeps them in an encrypted file of
 their own, with its own master password, in the standard KeePass (KDBX 4)
 format: KeePassXC on a computer opens the same file and shows the same
@@ -70,25 +70,25 @@ Authenticator is planned after the first release.
 
 ## Security
 
-SailFactor connects to nothing but your own Nextcloud, and only once you
+SailToken connects to nothing but your own Nextcloud, and only once you
 set up sync. It never writes decrypted data to disk. The
-[threat model](https://github.com/tordenskjoldsw/harbour-sailfactor/blob/main/docs/threat-model.md)
+[threat model](https://github.com/tordenskjoldsw/harbour-sailtoken/blob/main/docs/threat-model.md)
 describes what it protects against and where its limits are. Please report
 vulnerabilities privately as described in
-[SECURITY.md](https://github.com/tordenskjoldsw/harbour-sailfactor/blob/main/SECURITY.md).
+[SECURITY.md](https://github.com/tordenskjoldsw/harbour-sailtoken/blob/main/SECURITY.md).
 
 ## Status and install
 
-SailFactor 0.3.0 is written for Sailfish OS 5.2 and tested on the Jolla
+SailToken 0.3.0 is written for Sailfish OS 5.2 and tested on the Jolla
 Phone. It is not in the Jolla Store (Harbour) yet; submitting it is the
 next step. Until then, you can build the RPM yourself as described in the
-[README](https://github.com/tordenskjoldsw/harbour-sailfactor#building).
-The [plan](https://github.com/tordenskjoldsw/harbour-sailfactor/blob/main/PLAN.md)
+[README](https://github.com/tordenskjoldsw/harbour-sailtoken#building).
+The [plan](https://github.com/tordenskjoldsw/harbour-sailtoken/blob/main/PLAN.md)
 lists every phase and the decisions behind them.
 
 ## Contributing
 
 Bug reports and ideas are welcome as
-[issues](https://github.com/tordenskjoldsw/harbour-sailfactor/issues). If
+[issues](https://github.com/tordenskjoldsw/harbour-sailtoken/issues). If
 you plan a pull request, please open an issue first. Never attach a real
 secret, a real QR code or a real database, not even an encrypted one.
