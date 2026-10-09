@@ -55,8 +55,8 @@ both apps.
   and Steam Guard, the same codes KeePassXC shows for the same file
 - Reads every way KeePassXC and KeePass store TOTP settings in an entry
 - Copies a code with a tap and clears the clipboard after 30 seconds
-- Renames and deletes accounts, with a recycle bin and entry history as in
-  KeePassXC
+- Renames, moves and deletes accounts, with a recycle bin and entry
+  history as in KeePassXC
 - Locks after 2 minutes without use and after 30 seconds in the
   background; every change is saved at once, with three backups
 - Adds a file from KeePassXC, with or without a key file, from Documents
@@ -79,9 +79,9 @@ vulnerabilities privately as described in
 
 ## Status and install
 
-SailToken 0.3.0 is written for Sailfish OS 5.2 and tested on the Jolla
-Phone. It is not in the Jolla Store (Harbour) yet; submitting it is the
-next step. Until then, you can build the RPM yourself as described in the
+SailToken 0.5.0 is written for Sailfish OS 5.2 and tested on the Jolla
+Phone. It is not in the Jolla Store (Harbour) yet; the submission is under
+way. Until then, you can build the RPM yourself as described in the
 [README](https://github.com/tordenskjoldsw/harbour-sailtoken#building).
 The [plan](https://github.com/tordenskjoldsw/harbour-sailtoken/blob/main/PLAN.md)
 lists every phase and the decisions behind them.
