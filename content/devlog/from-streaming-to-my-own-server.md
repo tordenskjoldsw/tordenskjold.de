@@ -1,5 +1,5 @@
 ---
-title: My own music on my own phone
+title: From streaming to my own server
 summary: Why my third Sailfish OS app is a music player for my own server, and the decisions that shaped it.
 date: 2026-10-12
 project: sailtune
@@ -12,8 +12,9 @@ phone and on your own Jellyfin server.
 ## Why a music player
 
 On Android, I listened to music through a streaming subscription. With
-the Jolla Phone, I wanted to get away from it: my own music, from my own
-server, for the same reason I self-host a few other services at home.
+the Jolla Phone, I wanted to get away from it: my music collection, on
+my own server, for the same reason I self-host a few other services at
+home.
 
 What I was missing was a player for that server in the Jolla Store, made
 for music and for listening without a network. There are clients for

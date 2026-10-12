@@ -37,10 +37,10 @@ plays them without any network.
 ## Why a music player
 
 On Android, I listened to music through a streaming subscription. With
-the Jolla Phone, I wanted to get away from it and play my own music from
-my own server instead, for the same reason I self-host a few other
-services at home. I wanted a player for it in the Jolla Store, made for
-music only and for listening without a network.
+the Jolla Phone, I wanted to get away from it and play my music
+collection from my own server instead, for the same reason I self-host a
+few other services at home. I wanted a player for it in the Jolla Store,
+made for music only and for listening without a network.
 
 ## What it does
 
